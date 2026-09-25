@@ -1,0 +1,15 @@
+{
+  "name": "Smart Citizen Passport Portal",
+  "short_name": "Citizen Passport",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#0f2027",
+  "icons": [
+    {
+      "src": "https://flaticon.com",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
