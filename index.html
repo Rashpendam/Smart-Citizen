@@ -65,17 +65,26 @@
   <script>
     const totalMissions = 8;
 
-    window.addEventListener('DOMContentLoaded', () => {
-      // 1. Process any incoming QR code badge scan immediately
+        window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const unlockId = urlParams.get('unlock');
+      
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
+        // SCENARIO A: The user is scanning a mission booth code (?unlock=X)
         let completed = JSON.parse(localStorage.getItem('missions')) || {};
         completed[unlockId] = true;
         localStorage.setItem('missions', JSON.stringify(completed));
-        // Clear query strings from address bar cleanly
         window.history.replaceState({}, document.title, window.location.pathname);
+      } else {
+        // SCENARIO B: The user is opening the main page for the first time.
+        // We wipe the old cache data clean so the fields are completely blank!
+        localStorage.clear();
       }
+
+      // Refresh the user interface layout elements
+      updateUI();
+    });
+
 
       // 2. Refresh values on UI layout
       updateUI();
