@@ -112,7 +112,7 @@
       // Smoothly scroll down to show the checkpoint list dashboard
       document.getElementById('section-dashboard').scrollIntoView({ behavior: 'smooth' });
     }
-
+/*
     function updateUI() {
       const isRegistered = localStorage.getItem('user_registered');
       
@@ -240,8 +240,205 @@
         localStorage.clear();
         location.reload();
       }
+    }*/
+      function updateUI() {
+      const isRegistered = localStorage.getItem('user_registered');
+      
+      if (isRegistered) {
+        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
+        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
+        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
+        
+        document.getElementById('input-name').value = localStorage.getItem('user_name');
+        document.getElementById('input-class').value = localStorage.getItem('user_class');
+        document.getElementById('input-section').value = localStorage.getItem('user_section');
+        
+        document.getElementById('section-register').style.opacity = "0.7";
+      } else {
+        document.getElementById('dash-name').textContent = "Not Registered Yet";
+        document.getElementById('dash-class').textContent = "--";
+        document.getElementById('dash-section').textContent = "--";
+        document.getElementById('input-name').value = "";
+        document.getElementById('input-class').value = "";
+        document.getElementById('input-section').value = "";
+        document.getElementById('section-register').style.opacity = "1";
+      }
+
+      const completed = JSON.parse(localStorage.getItem('missions')) || {};
+      let count = 0;
+
+      for (let i = 1; i <= totalMissions; i++) {
+        const item = document.getElementById(`m${i}`);
+        if (completed[i]) {
+          item.classList.add('completed');
+          item.querySelector('.status-icon').textContent = '✅';
+          count++;
+        } else {
+          item.classList.remove('completed');
+          item.querySelector('.status-icon').textContent = '❌';
+        }
+      }
+
+      // Handle locking state and fire the celebratory effects system
+      if (count === totalMissions && isRegistered) {
+        document.getElementById('lock-overlay').style.display = 'none';
+        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
+        drawPassportCanvas();
+        
+        // Trigger the celebratory explosions if it hasn't fired yet during this render session
+        if (!window.hasCelebrated) {
+          window.hasCelebrated = true;
+          startCelebrationBlast();
+        }
+      } else {
+        document.getElementById('lock-overlay').style.display = 'block';
+        document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
+        window.hasCelebrated = false;
+      }
+    }
+
+    // 🎊 LIGHTWEIGHT BUBBLE & CONFETTI CELEBRATION ENGINE
+    function startCelebrationBlast() {
+      const canvas = document.getElementById('celebrationCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let particles = [];
+      const colors = ['#d4af37', '#00e676', '#ff9800', '#2196f3', '#e91e63', '#ffffff'];
+
+      // Generate 120 colorful celebratory elements (Bubbles and Confetti bursts)
+      for (let i = 0; i < 120; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + Math.random() * 100, // Spawn just below viewport view frame
+          radius: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          speedY: -(Math.random() * 4 + 3), // Float floating speeds upwards
+          speedX: Math.random() * 2 - 1,
+          type: Math.random() > 0.5 ? 'bubble' : 'confetti',
+          rotation: Math.random() * 360,
+          rotationSpeed: Math.random() * 4 - 2
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+
+        particles.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.rotation += p.rotationSpeed;
+
+          if (p.y > -20) {
+            alive = true; // Keep checking animations frames alive while particles remain on layout
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            
+            if (p.type === 'bubble') {
+              // Render transparent floating bubble circles
+              ctx.beginPath();
+              ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+              ctx.fillStyle = p.color + '44'; // Add opacity transparency alpha layer
+              ctx.fill();
+              ctx.strokeStyle = p.color;
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+            } else {
+              // Render standard festive spinning confetti square strips
+              ctx.rotate(p.rotation * Math.PI / 180);
+              ctx.fillStyle = p.color;
+              ctx.fillRect(-p.radius, -p.radius / 2, p.radius * 2, p.radius);
+            }
+            ctx.restore();
+          }
+        });
+
+        if (alive) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height); // Wipe the board clean completely at finish line
+        }
+      }
+      
+      animate();
+    }
+
+    function drawPassportCanvas() {
+      const canvas = document.getElementById('passportCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let grd = ctx.createLinearGradient(0, 0, 0, 850);
+      grd.addColorStop(0, '#0f2027');
+      grd.addColorStop(0.5, '#203a43');
+      grd.addColorStop(1, '#2c5364');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 600, 850);
+
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(20, 20, 560, 810);
+
+      ctx.fillStyle = '#d4af37';
+      ctx.font = 'bold 26px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PASSPORT OF HONOR', 300, 90);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.fillText('SMART CITIZEN', 300, 140);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillRect(50, 190, 500, 150);
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '20px sans-serif';
+      ctx.fillText(`NAME: ${(localStorage.getItem('user_name') || '').toUpperCase()}`, 80, 240);
+      ctx.fillText(`CLASS: ${(localStorage.getItem('user_class') || '').toUpperCase()}`, 80, 290);
+      ctx.fillText(`SECTION: ${(localStorage.getItem('user_section') || '').toUpperCase()}`, 350, 290);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#d4af37';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('COMPLETED NATIONAL MISSIONS', 300, 390);
+
+      const missions = [
+        "1. Mission India 2047", "2. Mission Clean & Green",
+        "3. Mission Healthy India", "4. Mission Digital India",
+        "5. Mission Sustainable India", "6. Smart Cities & Innovation",
+        "7. Mission Space, AI & Tech", "8. Enterprises & Builders"
+      ];
+
+      ctx.textAlign = 'left';
+      missions.forEach((m, idx) => {
+        let y = 440 + (idx * 42);
+        ctx.fillStyle = '#00e676';
+        ctx.beginPath(); ctx.arc(85, y-6, 8, 0, 2*Math.PI); ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '17px sans-serif';
+        ctx.fillText(m, 115, y);
+      });
+    }
+
+    function downloadPassport() {
+      const canvas = document.getElementById('passportCanvas');
+      const link = document.createElement('a');
+      link.download = `${localStorage.getItem('user_name') || 'Citizen'}_Smart_Passport.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function resetApp() {
+      if (confirm("Are you sure you want to clear your data and start a new journey?")) {
+        localStorage.clear();
+        location.reload();
+      }
     }
   </script>
+
+
 
 </body>
 </html>
