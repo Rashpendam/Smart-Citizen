@@ -1,15 +1,24 @@
-const CACHE_NAME = 'citizen-passport-v1';
-const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/manifest.json'
-];
+const CACHE_NAME = 'citizen-passport-v3'; // Incremented version to smash old cache completely
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
+  self.skipWaiting(); 
+});
+
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          return caches.delete(key); // Wipes out absolutely all old versions completely
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (e) => {
-  e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+  // Always fetch live from the network first so the ?unlock parameters work instantly every time
+  e.respondWith(
+    fetch(e.request).catch(() => caches.match(e.request))
+  );
 });
