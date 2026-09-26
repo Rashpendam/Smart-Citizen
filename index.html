@@ -12,14 +12,14 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- SCREEN 1: REGISTRATION -->
-    <main id="screen-register" class="content hidden">
-      <h2>1. Complete Registration</h2>
-      <p class="instruction">Fill out the official form and enter your details below to activate your tracking profile.</p>
+    <!-- SECTION 1: REGISTRATION FORM -->
+    <main class="content-section">
+      <h2>Step 1: Complete Registration</h2>
+      <p class="instruction">Fill out the official form below first. Then type your print details to unlock your dashboard.</p>
       
       <div class="iframe-container">
-        <!-- REPLACE WITH YOUR ACTUAL GOOGLE FORM EMBED LINK -->
-        <iframe src="<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSftPb-YpYfFyx5uGIUKIjcHwAox7HbZHOCoHuIyFNSAX66E_g/viewform?embedded=true" width="640" height="1334" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>" width="100%" height="300" frameborder="0">Loading Form...</iframe>
+        <!-- PUT YOUR GOOGLE FORM URL BELOW -->
+        <iframe src="https://google.com" width="100%" height="320" frameborder="0">Loading Form...</iframe>
       </div>
 
       <div class="local-input-group">
@@ -27,20 +27,17 @@
         <input type="text" id="input-name" placeholder="Full Name (for Passport)">
         <input type="text" id="input-class" placeholder="Class">
         <input type="text" id="input-section" placeholder="Section">
+        <button id="start-btn" onclick="registerUser()">Save My Profile Details 💾</button>
       </div>
-
-      <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
     </main>
 
-    <!-- SCREEN 2: MISSION DASHBOARD -->
-    <main id="screen-dashboard" class="content hidden">
+    <!-- SECTION 2: MISSION DASHBOARD -->
+    <main class="content-section dashboard-box">
+      <h2>Step 2: Your Mission Checklist</h2>
       <div class="profile-summary">
-        <p>Citizen: <strong id="dash-name">---</strong></p>
-        <p>Class: <span id="dash-class">---</span> | Section: <span id="dash-section">---</span></p>
+        <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
+        <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
       </div>
-
-      <h2>Your Mission Checklists</h2>
-      <p class="instruction">Visit each venue area and scan its unique QR code to unlock all badges!</p>
       
       <div class="mission-list">
         <div class="mission-item" id="m1"><span class="status-icon">❌</span> 1. Mission India 2047</div>
@@ -52,66 +49,44 @@
         <div class="mission-item" id="m7"><span class="status-icon">❌</span> 7. Mission Space, AI & Tech</div>
         <div class="mission-item" id="m8"><span class="status-icon">❌</span> 8. Enterprises & Nation Builders</div>
       </div>
-
-      <div id="completion-alert" class="hidden">
-        🎉 All Missions Accomplished! Your Official Passport is ready!
-        <button class="gold-btn" onclick="showPassportScreen()">View & Download Passport ✨</button>
-      </div>
     </main>
 
-    <!-- SCREEN 3: FINAL PASSPORT GENERATOR -->
-    <main id="screen-passport" class="content hidden">
-      <h2>Your Smart Citizen Passport</h2>
-      <p class="instruction">Long-press the image below or click download to save your passport.</p>
-      
-      <div class="canvas-container">
+    <!-- SECTION 3: PASSPORT OUTPUT (Always visible once unlocked) -->
+    <main class="content-section passport-box">
+      <h2>Step 3: Your Generated Passport</h2>
+      <p class="instruction">Once you scan all 8 QR codes, your digital certificate will render here automatically!</p>
+      <div id="lock-overlay">🔒 Locked until all 8 missions are completed</div>
+      <div class="canvas-container hidden-canvas" id="canvas-wrapper">
         <canvas id="passportCanvas" width="600" height="850"></canvas>
+        <button class="download-btn" onclick="downloadPassport()">📥 Download Image</button>
+        <button class="back-btn" onclick="resetApp()">🔄 Clear All & Reset Journey</button>
       </div>
-
-      <button class="download-btn" onclick="downloadPassport()">📥 Download Image</button>
-      <button class="back-btn" onclick="resetApp()">🔄 Start New Journey</button>
     </main>
   </div>
 
   <script>
     const totalMissions = 8;
 
-    // Check application states on load
     window.addEventListener('DOMContentLoaded', () => {
-      handleIncomingQR();
-      routeScreen();
-    });
-
-    function handleIncomingQR() {
+      // 1. Process any incoming QR code scan immediately
       const urlParams = new URLSearchParams(window.location.search);
       const unlockId = urlParams.get('unlock');
-      
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
         let completed = JSON.parse(localStorage.getItem('missions')) || {};
         completed[unlockId] = true;
         localStorage.setItem('missions', JSON.stringify(completed));
-        
-        // Clean the URL parameters so refreshing doesn't cause issues
         window.history.replaceState({}, document.title, window.location.pathname);
       }
-    }
 
-    function routeScreen() {
-      const isRegistered = localStorage.getItem('user_registered');
-      if (!isRegistered) {
-        showScreen('screen-register');
-      } else {
-        showScreen('screen-dashboard');
-        updateDashboardUI();
+      // 2. Load existing profile data if it exists
+      if (localStorage.getItem('user_registered')) {
+        document.getElementById('input-name').value = localStorage.getItem('user_name') || '';
+        document.getElementById('input-class').value = localStorage.getItem('user_class') || '';
+        document.getElementById('input-section').value = localStorage.getItem('user_section') || '';
       }
-    }
 
-    function showScreen(screenId) {
-      document.getElementById('screen-register').classList.add('hidden');
-      document.getElementById('screen-dashboard').classList.add('hidden');
-      document.getElementById('screen-passport').classList.add('hidden');
-      document.getElementById(screenId).classList.remove('hidden');
-    }
+      updateUI();
+    });
 
     function registerUser() {
       const name = document.getElementById('input-name').value.trim();
@@ -119,7 +94,7 @@
       const sec = document.getElementById('input-section').value.trim();
 
       if (!name || !cls || !sec) {
-        alert("Please enter your Name, Class, and Section to activate printing!");
+        alert("Please fill in Name, Class, and Section!");
         return;
       }
 
@@ -127,15 +102,21 @@
       localStorage.setItem('user_class', cls);
       localStorage.setItem('user_section', sec);
       localStorage.setItem('user_registered', 'true');
-
-      routeScreen();
+      
+      updateUI();
+      alert("Profile Saved! Scroll down to see your checklist.");
     }
 
-    function updateDashboardUI() {
-      document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
-      document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
-      document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
+    function updateUI() {
+      // Update header profile summary strings safely
+      const registered = localStorage.getItem('user_registered');
+      if (registered) {
+        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
+        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
+        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
+      }
 
+      // Read completed array from storage
       const completed = JSON.parse(localStorage.getItem('missions')) || {};
       let count = 0;
 
@@ -148,21 +129,19 @@
         }
       }
 
-      if (count === totalMissions) {
-        document.getElementById('completion-alert').classList.remove('hidden');
+      // Handle unlocking of the canvas passport generator card
+      if (count === totalMissions && registered) {
+        document.getElementById('lock-overlay').style.display = 'none';
+        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
+        drawPassportCanvas();
       }
-    }
-
-    function showPassportScreen() {
-      showScreen('screen-passport');
-      drawPassportCanvas();
     }
 
     function drawPassportCanvas() {
       const canvas = document.getElementById('passportCanvas');
       const ctx = canvas.getContext('2d');
 
-      // 1. Vibrant Gradient Background
+      // Gradient Background
       let grd = ctx.createLinearGradient(0, 0, 0, 850);
       grd.addColorStop(0, '#0f2027');
       grd.addColorStop(0.5, '#203a43');
@@ -170,47 +149,37 @@
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, 600, 850);
 
-      // 2. Decorative Gold Borders
+      // Gold Borders
       ctx.strokeStyle = '#d4af37';
       ctx.lineWidth = 8;
       ctx.strokeRect(20, 20, 560, 810);
-      ctx.lineWidth = 2;
-      ctx.strokeRect(30, 30, 540, 790);
 
-      // 3. Header Texts
+      // Headers
       ctx.fillStyle = '#d4af37';
-      ctx.font = 'bold 28px sans-serif';
+      ctx.font = 'bold 26px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('PASSPORT OF HONOR', 300, 90);
-
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 36px sans-serif';
       ctx.fillText('SMART CITIZEN', 300, 140);
 
-      // Decorative Line
-      ctx.fillStyle = '#d4af37';
-      ctx.fillRect(150, 170, 300, 4);
-
-      // 4. User Information Box
+      // Data Block box outline
       ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.fillRect(50, 200, 500, 150);
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
-      ctx.strokeRect(50, 200, 500, 150);
+      ctx.fillRect(50, 190, 500, 150);
 
       ctx.textAlign = 'left';
       ctx.fillStyle = '#ffffff';
-      ctx.font = '22px sans-serif';
-      ctx.fillText(`NAME: ${localStorage.getItem('user_name').toUpperCase()}`, 80, 245);
-      ctx.fillText(`CLASS: ${localStorage.getItem('user_class').toUpperCase()}`, 80, 295);
-      ctx.fillText(`SECTION: ${localStorage.getItem('user_section').toUpperCase()}`, 340, 295);
+      ctx.font = '20px sans-serif';
+      ctx.fillText(`NAME: ${(localStorage.getItem('user_name') || '').toUpperCase()}`, 80, 240);
+      ctx.fillText(`CLASS: ${(localStorage.getItem('user_class') || '').toUpperCase()}`, 80, 290);
+      ctx.fillText(`SECTION: ${(localStorage.getItem('user_section') || '').toUpperCase()}`, 350, 290);
 
-      // 5. Badges / Achievements Title
+      // Render Completed Achievements Lists titles
       ctx.textAlign = 'center';
       ctx.fillStyle = '#d4af37';
-      ctx.font = 'bold 22px sans-serif';
-      ctx.fillText('COMPLETED NATIONAL MISSIONS', 300, 400);
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('COMPLETED NATIONAL MISSIONS', 300, 390);
 
-      // 6. Render the 8 Missions inside the Canvas Passport
       const missions = [
         "1. Mission India 2047", "2. Mission Clean & Green",
         "3. Mission Healthy India", "4. Mission Digital India",
@@ -219,40 +188,30 @@
       ];
 
       ctx.textAlign = 'left';
-      ctx.font = '16px sans-serif';
-      missions.forEach((mission, index) => {
-        let yPos = 450 + (index * 40);
-        // Draw green badge circle
+      missions.forEach((m, idx) => {
+        let y = 440 + (idx * 42);
         ctx.fillStyle = '#00e676';
-        ctx.beginPath();
-        ctx.arc(85, yPos - 6, 10, 0, 2 * Math.PI);
-        ctx.fill();
-        
-        // Draw checkmark symbol inside badge
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 12px sans-serif';
-        ctx.fillText('✓', 80, yPos - 2);
-
-        // Draw mission label text
+        ctx.beginPath(); ctx.arc(85, y-6, 8, 0, 2*Math.PI); ctx.fill();
         ctx.fillStyle = '#ffffff';
-        ctx.font = '18px sans-serif';
-        ctx.fillText(mission, 115, yPos);
+        ctx.font = '17px sans-serif';
+        ctx.fillText(m, 115, y);
       });
-
-      // 7. Footer Seal Authorization
-      ctx.textAlign = 'center';
-      ctx.fillStyle = 'rgba(212, 175, 55, 0.7)';
-      ctx.font = 'italic 16px sans-serif';
-      ctx.fillText('Authorized Virtual Credential • True Citizen of India', 300, 780);
     }
 
     function downloadPassport() {
       const canvas = document.getElementById('passportCanvas');
-      const imageURL = canvas.toDataURL('image/png');
-      
       const link = document.createElement('a');
-      link.download = `${localStorage.getItem('user_name')}_Smart_Citizen_Passport.png`;
-      link.href = imageURL;
+      link.download = `${localStorage.getItem('user_name') || 'Citizen'}_Passport.png`;
+      link.href = canvas.toDataURL('image/png');
       link.click();
     }
 
+    function resetApp() {
+      if (confirm("Reset profile progress?")) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
