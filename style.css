@@ -5,129 +5,100 @@ body {
   color: #e0e0e0;
   display: flex;
   justify-content: center;
-  min-height: 100vh;
 }
 .app-shell {
   width: 100%;
   max-width: 480px;
   background: #1e1e1e;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 header {
   background: linear-gradient(135deg, #0f2027, #203a43);
   color: #d4af37;
-  padding: 20px;
+  padding: 18px;
   font-weight: bold;
   text-align: center;
   font-size: 1.2rem;
   border-bottom: 2px solid #d4af37;
 }
-.content {
+.content-section {
   padding: 20px;
-  flex: 1;
+  border-bottom: 1px solid #333;
 }
-h2 { color: #d4af37; margin-top: 0; font-size: 1.4rem; }
-h3 { color: #ffffff; margin-bottom: 10px; font-size: 1.1rem; }
-.instruction { color: #aaa; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4; }
-.hidden { display: none !important; }
+h2 { color: #d4af37; margin-top: 0; font-size: 1.25rem; }
+.instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; }
 
-/* Setup Input Blocks */
 .iframe-container {
   border: 1px solid #333;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   background: #fff;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
+.local-input-group h3 { font-size: 1rem; color: #fff; margin-bottom: 8px; }
 .local-input-group input {
-  width: -webkit-fill-available;
-  width: fill-available;
+  width: 100%;
+  box-sizing: border-box;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   background: #2d2d2d;
   border: 1px solid #444;
   color: #fff;
   border-radius: 6px;
-  font-size: 1rem;
 }
 
-/* Profiles & Dashboard Lists */
 .profile-summary {
   background: #2d2d2d;
-  padding: 12px 20px;
-  border-radius: 8px;
+  padding: 10px 15px;
+  border-radius: 6px;
   border-left: 4px solid #d4af37;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
-.profile-summary p { margin: 4px 0; color: #ccc; }
-.mission-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.profile-summary p { margin: 4px 0; font-size: 0.9rem; }
+
+.mission-list { display: flex; flex-direction: column; gap: 8px; }
 .mission-item {
   background: #252525;
-  padding: 15px;
+  padding: 12px;
   border-radius: 6px;
-  border: 1px solid #333;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #999;
+  gap: 10px;
+  color: #888;
+  border: 1px solid #2d2d2d;
 }
 .mission-item.completed {
   border-color: #00e676;
   background: rgba(0, 230, 118, 0.05);
-  color: #ffffff;
-  font-weight: 500;
-}
-
-/* Completion Alert Banner */
-#completion-alert {
-  margin-top: 25px;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid #d4af37;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
   color: #fff;
-  font-weight: bold;
 }
 
-/* Canvas Output Graphics */
-.canvas-container {
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+#lock-overlay {
+  background: #2d2d2d;
+  padding: 30px;
+  text-align: center;
+  border-radius: 6px;
+  color: #ff9800;
+  border: 1px dashed #ff9800;
 }
-canvas {
-  display: block;
+.hidden-canvas { display: none !important; }
+.canvas-container canvas {
   width: 100%;
   height: auto;
-  background: #111;
+  border-radius: 6px;
 }
 
-/* Action Control Buttons */
 button {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background: #d4af37;
   color: #000;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 5px;
 }
-button:hover { background: #f3cc4a; }
-.gold-btn { background: #d4af37; color: #000; margin-top: 15px; }
-.download-btn { background: #00e676; color: #000; }
-.download-btn:hover { background: #1eff8b; }
-.back-btn { background: #333; color: #ccc; margin-top: 15px; }
-.back-btn:hover { background: #444; }
+.download-btn { background: #00e676; margin-top: 15px; }
+.back-btn { background: #444; color: #fff; margin-top: 10px; }
