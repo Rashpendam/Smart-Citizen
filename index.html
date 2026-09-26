@@ -62,31 +62,30 @@
     </main>
   </div>
 
-  <script>
+    <script>
     const totalMissions = 8;
 
-        window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const unlockId = urlParams.get('unlock');
+      const isNewStart = urlParams.get('start');
       
+      // 1. If they scan the Main Entry QR code with (?start=true), wipe old data for a fresh start!
+      if (isNewStart === 'true') {
+        localStorage.clear();
+        // Clean the URL bar so it doesn't clear on accidental refreshes
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      // 2. If they are scanning a mission booth code (?unlock=X), save that mission checkpoint
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
-        // SCENARIO A: The user is scanning a mission booth code (?unlock=X)
         let completed = JSON.parse(localStorage.getItem('missions')) || {};
         completed[unlockId] = true;
         localStorage.setItem('missions', JSON.stringify(completed));
         window.history.replaceState({}, document.title, window.location.pathname);
-      } else {
-        // SCENARIO B: The user is opening the main page for the first time.
-        // We wipe the old cache data clean so the fields are completely blank!
-        localStorage.clear();
       }
 
-      // Refresh the user interface layout elements
-      updateUI();
-    });
-
-
-      // 2. Refresh values on UI layout
+      // 3. Refresh the user interface layout elements
       updateUI();
     });
 
@@ -125,8 +124,16 @@
         document.getElementById('input-class').value = localStorage.getItem('user_class');
         document.getElementById('input-section').value = localStorage.getItem('user_section');
         
-        // Optional style tweak: fade the register section slightly so they focus on step 2
         document.getElementById('section-register').style.opacity = "0.7";
+      } else {
+        // Reset if no user is registered
+        document.getElementById('dash-name').textContent = "Not Registered Yet";
+        document.getElementById('dash-class').textContent = "--";
+        document.getElementById('dash-section').textContent = "--";
+        document.getElementById('input-name').value = "";
+        document.getElementById('input-class').value = "";
+        document.getElementById('input-section').value = "";
+        document.getElementById('section-register').style.opacity = "1";
       }
 
       // Read completed items from local memory storage
@@ -139,6 +146,9 @@
           item.classList.add('completed');
           item.querySelector('.status-icon').textContent = '✅';
           count++;
+        } else {
+          item.classList.remove('completed');
+          item.querySelector('.status-icon').textContent = '❌';
         }
       }
 
@@ -147,6 +157,9 @@
         document.getElementById('lock-overlay').style.display = 'none';
         document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
         drawPassportCanvas();
+      } else {
+        document.getElementById('lock-overlay').style.display = 'block';
+        document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
       }
     }
 
@@ -226,5 +239,6 @@
       }
     }
   </script>
+
 </body>
 </html>
