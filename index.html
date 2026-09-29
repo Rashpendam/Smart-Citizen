@@ -243,7 +243,7 @@
         location.reload();
       }
     }*/
-      function updateUI() {
+ /*     function updateUI() {
       const isRegistered = localStorage.getItem('user_registered');
       
       if (isRegistered) {
@@ -298,7 +298,71 @@
         document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
         window.hasCelebrated = false;
       }
+    }*/
+          function updateUI() {
+      const isRegistered = localStorage.getItem('user_registered');
+      
+      if (isRegistered) {
+        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
+        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
+        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
+        
+        document.getElementById('input-name').value = localStorage.getItem('user_name');
+        document.getElementById('input-class').value = localStorage.getItem('user_class');
+        document.getElementById('input-section').value = localStorage.getItem('user_section');
+        
+        document.getElementById('section-register').style.opacity = "0.7";
+      } else {
+        document.getElementById('dash-name').textContent = "Not Registered Yet";
+        document.getElementById('dash-class').textContent = "--";
+        document.getElementById('dash-section').textContent = "--";
+        document.getElementById('input-name').value = "";
+        document.getElementById('input-class').value = "";
+        document.getElementById('input-section').value = "";
+        document.getElementById('section-register').style.opacity = "1";
+      }
+
+      const completed = JSON.parse(localStorage.getItem('missions')) || {};
+      let count = 0;
+
+      for (let i = 1; i <= totalMissions; i++) {
+        const item = document.getElementById(`m${i}`);
+        if (completed[i]) {
+          item.classList.add('completed');
+          item.querySelector('.status-icon').textContent = '✅';
+          count++;
+        } else {
+          item.classList.remove('completed');
+          item.querySelector('.status-icon').textContent = '❌';
+        }
+      }
+
+      // Handle locking state, sound, and fire the celebratory effects system
+      if (count === totalMissions && isRegistered) {
+        document.getElementById('lock-overlay').style.display = 'none';
+        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
+        drawPassportCanvas();
+        
+        // Trigger the celebratory audio and bubbles if it hasn't fired yet
+        if (!window.hasCelebrated) {
+          window.hasCelebrated = true;
+          
+          // Play the audio chime safely
+          const sound = document.getElementById('victorySound');
+          if (sound) {
+            sound.volume = 0.6; // Adjust volume comfort levels
+            sound.play().catch(err => console.log("Audio waiting for user gesture tap to unmute"));
+          }
+          
+          startCelebrationBlast();
+        }
+      } else {
+        document.getElementById('lock-overlay').style.display = 'block';
+        document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
+        window.hasCelebrated = false;
+      }
     }
+
 
     // 🎊 LIGHTWEIGHT BUBBLE & CONFETTI CELEBRATION ENGINE
     function startCelebrationBlast() {
