@@ -52,6 +52,8 @@
       <h2>Step 3: Your Generated Passport</h2>
             <!-- CELEBRATION EFFECT OVERLAY -->
       <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
+            <!-- CELEBRATION AUDIO TRACK -->
+    
 
       <p class="instruction">Once you register and scan all 8 QR codes, your digital certificate will unlock automatically below!</p>
       
@@ -289,6 +291,7 @@
         if (!window.hasCelebrated) {
           window.hasCelebrated = true;
           startCelebrationBlast();
+            <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
         }
       } else {
         document.getElementById('lock-overlay').style.display = 'block';
