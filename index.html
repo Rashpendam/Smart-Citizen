@@ -12,59 +12,129 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- STEP 1: REGISTRATION PROFILE -->
-    <main id="section-register" class="content-section">
-      <h2>Step 1: Create Your Profile</h2>
-      <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
-      
-      <div class="local-input-group">
-        <input type="text" id="input-name" placeholder="Full Name (for Passport)">
-        <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
-        <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
-        <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
-      </div>
-    </main>
+    <!-- SCREEN A: THE INTERACTIVE APP HUB -->
+    <div id="screen-hub">
+      <!-- STEP 1: REGISTRATION PROFILE -->
+      <main id="section-register" class="content-section">
+        <h2>Step 1: Create Your Profile</h2>
+        <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
+        
+        <div class="local-input-group">
+          <input type="text" id="input-name" placeholder="Full Name (for Passport)">
+          <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
+          <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
+          <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
+        </div>
+      </main>
 
-    <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
-    <main id="section-dashboard" class="content-section dashboard-box">
-      <h2>Step 2: Your Explorer Dashboard</h2>
-      
-      <div class="profile-summary">
-        <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
-        <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
-      </div>
+      <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
+      <main id="section-dashboard" class="content-section dashboard-box">
+        <h2>Step 2: Your Explorer Dashboard</h2>
+        
+        <div class="profile-summary">
+          <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
+          <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
+        </div>
 
-      <!-- 4 VERTICAL APP GRAPHICS -->
-      <div class="visual-gallery">
-        <div class="gallery-item">
-          <h3>1. Visitor Passport</h3>
-          <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
-        </div>
-        
-        <div class="gallery-item">
-          <h3>2. Welcome Banner</h3>
-          <img src="welcome.png" alt="Welcome Image" class="app-fluid-img">
-        </div>
-        
-        <div class="gallery-item">
-          <h3>3. Exhibition Route Map</h3>
-          <img src="route_map.png" alt="Exhibition Route Map" class="app-fluid-img">
-        </div>
-        
-        <div class="gallery-item">
-          <h3>4. Your Stamp Collection Board</h3>
-          <div class="stamp-board-container">
-            <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
-            <!-- Phase 2 will position dynamic badge stamps right on top of this container layer -->
+        <div class="visual-gallery">
+          <div class="gallery-item">
+            <h3>1. Visitor Passport</h3>
+            <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
+          </div>
+          
+          <div class="gallery-item">
+            <h3>2. Welcome Banner</h3>
+            <img src="welcome.png" alt="Welcome Image" class="app-fluid-img">
+          </div>
+          
+          <div class="gallery-item">
+            <h3>3. Exhibition Route Map</h3>
+            <img src="route_map.png" alt="Exhibition Route Map" class="app-fluid-img">
+          </div>
+          
+          <div class="gallery-item">
+            <h3>4. Your Stamp Collection Board</h3>
+            <div class="stamp-board-container">
+              <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
+              
+              <!-- GRID LAYOUT OVERLAY FOR STAMPS (Renders on top of your stamp board base) -->
+              <div class="stamps-grid-overlay">
+                <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              </div>
+            </div>
           </div>
         </div>
+      </main>
+    </div>
+
+    <!-- SCREEN B: SINGLE MISSION COMPLETED POP-UP VIEW -->
+    <div id="screen-mission-alert" class="content-section text-center hidden">
+      <h2 id="mission-alert-title">Mission Cleared!</h2>
+      <div class="passport-stamp-frame">
+        <img id="mission-alert-img" src="green_citizen.png" alt="Mission State Image">
+        <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
       </div>
-    </main>
+      <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile dashboard tracking asset.</p>
+      <button class="return-hub-btn" onclick="closeMissionView()">↩️ Return to Dashboard Hub</button>
+    </div>
   </div>
 
   <script>
+    const totalMissions = 6;
+    const missionFiles = [
+      "green_citizen.png",
+      "healthy_citizen.png",
+      "digital_citizen.png",
+      "sustainable_india.png",
+      "innovation_citizen.png",
+      "young_entrepreneur.png"
+    ];
+    const missionNames = [
+      "1. Green Citizen Mission",
+      "2. Healthy Citizen Mission",
+      "3. Digital Citizen Mission",
+      "4. Sustainable India Mission",
+      "5. Innovation Citizen Mission",
+      "6. Young Entrepreneur Mission"
+    ];
+
     window.addEventListener('DOMContentLoaded', () => {
-      // Logic checks for query inputs will sit here in Phase 2
+      const urlParams = new URLSearchParams(window.location.search);
+      const unlockId = parseInt(urlParams.get('unlock'), 10);
+      const isNewStart = urlParams.get('start');
+      
+      if (isNewStart === 'true') {
+        localStorage.clear();
+        window.history.replaceState({}, document.title, window.location.pathname);
+        updateUI();
+        return;
+      }
+
+      if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
+        let currentProgress = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
+        
+        // Sequential enforcement logic:
+        if (unlockId === currentProgress + 1) {
+          // Valid step link scanned! Advance user status
+          localStorage.setItem('unlocked_count', unlockId);
+          window.history.replaceState({}, document.title, window.location.pathname);
+          
+          // Trigger Phase 3 Popup interface immediately
+          showMissionPopupView(unlockId);
+        } else if (unlockId <= currentProgress) {
+          alert(`You have already completed the ${missionNames[unlockId - 1]}!`);
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } else {
+          alert(`⚠️ Route Out of Order! Please complete Mission ${currentProgress + 1} before scanning this station code.`);
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+
       updateUI();
     });
 
@@ -87,6 +157,21 @@
       document.getElementById('section-dashboard').scrollIntoView({ behavior: 'smooth' });
     }
 
+    function showMissionPopupView(id) {
+      document.getElementById('screen-hub').classList.add('hidden');
+      document.getElementById('screen-mission-alert').classList.remove('hidden');
+      
+      document.getElementById('mission-alert-title').textContent = missionNames[id - 1];
+      document.getElementById('mission-alert-img').src = missionFiles[id - 1];
+      window.scrollTo(0, 0);
+    }
+
+    function closeMissionView() {
+      document.getElementById('screen-mission-alert').classList.add('hidden');
+      document.getElementById('screen-hub').classList.remove('hidden');
+      updateUI();
+    }
+
     function updateUI() {
       const isRegistered = localStorage.getItem('user_registered');
       if (isRegistered) {
@@ -94,6 +179,34 @@
         document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
         document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
         document.getElementById('section-register').style.opacity = "0.6";
+        
+        document.getElementById('input-name').value = localStorage.getItem('user_name');
+        document.getElementById('input-class').value = localStorage.getItem('user_class');
+        document.getElementById('input-section').value = localStorage.getItem('user_section');
+      } else {
+        document.getElementById('dash-name').textContent = "Not Registered Yet";
+        document.getElementById('dash-class').textContent = "--";
+        document.getElementById('dash-section').textContent = "--";
+        document.getElementById('section-register').style.opacity = "1";
+      }
+
+      const count = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
+      
+      // Update Stamp board grid layout blocks
+      for (let i = 1; i <= totalMissions; i++) {
+        const slot = document.getElementById(`slot-${i}`);
+        const img = slot.querySelector('.stamp-img');
+        const badge = slot.querySelector('.badge-overlay');
+        
+        if (i <= count) {
+          img.classList.remove('opacity-fade');
+          badge.textContent = '✅';
+          badge.style.background = '#00e676';
+        } else {
+          img.classList.add('opacity-fade');
+          badge.textContent = '❌';
+          badge.style.background = '#e53935';
+        }
       }
     }
   </script>
