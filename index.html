@@ -12,85 +12,59 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- STEP 1: INITIAL REGISTRATION PROFILE -->
+    <!-- STEP 1: REGISTRATION PROFILE -->
     <main id="section-register" class="content-section">
       <h2>Step 1: Create Your Profile</h2>
-      <p class="instruction">Enter your official details below to activate your digital Smart Citizen Passport tracking profile.</p>
+      <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
       
       <div class="local-input-group">
         <input type="text" id="input-name" placeholder="Full Name (for Passport)">
         <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
         <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
-        <button id="start-btn" onclick="registerUser()">Create & Activate Profile 🚀</button>
+        <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
       </div>
     </main>
 
-    <!-- STEP 2: MISSION DASHBOARD -->
+    <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
     <main id="section-dashboard" class="content-section dashboard-box">
-      <h2>Step 2: Your Mission Checklist</h2>
+      <h2>Step 2: Your Explorer Dashboard</h2>
+      
       <div class="profile-summary">
         <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
         <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
       </div>
-      
-      <p class="instruction">Visit each venue booth and scan its unique QR code to unlock your national badges!</p>
 
-      <div class="mission-list">
-        <div class="mission-item" id="m1"><span class="status-icon">❌</span> 1. Mission India 2047</div>
-        <div class="mission-item" id="m2"><span class="status-icon">❌</span> 2. Mission Clean and Green India</div>
-        <div class="mission-item" id="m3"><span class="status-icon">❌</span> 3. Mission Healthy India</div>
-        <div class="mission-item" id="m4"><span class="status-icon">❌</span> 4. Mission Digital India</div>
-        <div class="mission-item" id="m5"><span class="status-icon">❌</span> 5. Mission Sustainable India</div>
-        <div class="mission-item" id="m6"><span class="status-icon">❌</span> 6. Smart Cities & Innovation</div>
-        <div class="mission-item" id="m7"><span class="status-icon">❌</span> 7. Mission Space, AI & Tech</div>
-        <div class="mission-item" id="m8"><span class="status-icon">❌</span> 8. Enterprises & Nation Builders</div>
-      </div>
-    </main>
-
-    <!-- STEP 3: PASSPORT OUTPUT -->
-    <main class="content-section passport-box">
-      <h2>Step 3: Your Generated Passport</h2>
-            <!-- CELEBRATION EFFECT OVERLAY -->
-      <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
-            <!-- CELEBRATION AUDIO TRACK -->
-    
-
-      <p class="instruction">Once you register and scan all 8 QR codes, your digital certificate will unlock automatically below!</p>
-      
-      <div id="lock-overlay">🔒 Passport Locked until all 8 missions are completed</div>
-      
-      <div class="canvas-container hidden-canvas" id="canvas-wrapper">
-        <canvas id="passportCanvas" width="600" height="850"></canvas>
-        <button class="download-btn" onclick="downloadPassport()">📥 Download My Passport</button>
-        <button class="back-btn" onclick="resetApp()">🔄 Clear Profile & Reset Journey</button>
+      <!-- 4 VERTICAL APP GRAPHICS -->
+      <div class="visual-gallery">
+        <div class="gallery-item">
+          <h3>1. Visitor Passport</h3>
+          <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
+        </div>
+        
+        <div class="gallery-item">
+          <h3>2. Welcome Banner</h3>
+          <img src="welcome.png" alt="Welcome Image" class="app-fluid-img">
+        </div>
+        
+        <div class="gallery-item">
+          <h3>3. Exhibition Route Map</h3>
+          <img src="route_map.png" alt="Exhibition Route Map" class="app-fluid-img">
+        </div>
+        
+        <div class="gallery-item">
+          <h3>4. Your Stamp Collection Board</h3>
+          <div class="stamp-board-container">
+            <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
+            <!-- Phase 2 will position dynamic badge stamps right on top of this container layer -->
+          </div>
+        </div>
       </div>
     </main>
   </div>
 
-    <script>
-    const totalMissions = 8;
-
+  <script>
     window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const unlockId = urlParams.get('unlock');
-      const isNewStart = urlParams.get('start');
-      
-      // 1. If they scan the Main Entry QR code with (?start=true), wipe old data for a fresh start!
-      if (isNewStart === 'true') {
-        localStorage.clear();
-        // Clean the URL bar so it doesn't clear on accidental refreshes
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-
-      // 2. If they are scanning a mission booth code (?unlock=X), save that mission checkpoint
-      if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
-        let completed = JSON.parse(localStorage.getItem('missions')) || {};
-        completed[unlockId] = true;
-        localStorage.setItem('missions', JSON.stringify(completed));
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-
-      // 3. Refresh the user interface layout elements
+      // Logic checks for query inputs will sit here in Phase 2
       updateUI();
     });
 
@@ -110,402 +84,18 @@
       localStorage.setItem('user_registered', 'true');
       
       updateUI();
-      
-      // Smoothly scroll down to show the checkpoint list dashboard
       document.getElementById('section-dashboard').scrollIntoView({ behavior: 'smooth' });
     }
-/*
+
     function updateUI() {
       const isRegistered = localStorage.getItem('user_registered');
-      
-      if (isRegistered) {
-        // Load names into the status display banner box
-        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
-        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
-        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
-        
-        // Populate inputs with stored values so they know they are saved
-        document.getElementById('input-name').value = localStorage.getItem('user_name');
-        document.getElementById('input-class').value = localStorage.getItem('user_class');
-        document.getElementById('input-section').value = localStorage.getItem('user_section');
-        
-        document.getElementById('section-register').style.opacity = "0.7";
-      } else {
-        // Reset if no user is registered
-        document.getElementById('dash-name').textContent = "Not Registered Yet";
-        document.getElementById('dash-class').textContent = "--";
-        document.getElementById('dash-section').textContent = "--";
-        document.getElementById('input-name').value = "";
-        document.getElementById('input-class').value = "";
-        document.getElementById('input-section').value = "";
-        document.getElementById('section-register').style.opacity = "1";
-      }
-
-      // Read completed items from local memory storage
-      const completed = JSON.parse(localStorage.getItem('missions')) || {};
-      let count = 0;
-
-      for (let i = 1; i <= totalMissions; i++) {
-        const item = document.getElementById(`m${i}`);
-        if (completed[i]) {
-          item.classList.add('completed');
-          item.querySelector('.status-icon').textContent = '✅';
-          count++;
-        } else {
-          item.classList.remove('completed');
-          item.querySelector('.status-icon').textContent = '❌';
-        }
-      }
-
-      // Handle locking state of the passport card panel
-      if (count === totalMissions && isRegistered) {
-        document.getElementById('lock-overlay').style.display = 'none';
-        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
-        drawPassportCanvas();
-      } else {
-        document.getElementById('lock-overlay').style.display = 'block';
-        document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
-      }
-    }
-
-    function drawPassportCanvas() {
-      const canvas = document.getElementById('passportCanvas');
-      const ctx = canvas.getContext('2d');
-
-      // Gradient Background Color Profile
-      let grd = ctx.createLinearGradient(0, 0, 0, 850);
-      grd.addColorStop(0, '#0f2027');
-      grd.addColorStop(0.5, '#203a43');
-      grd.addColorStop(1, '#2c5364');
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, 600, 850);
-
-      // Gold Borders Asset Line
-      ctx.strokeStyle = '#d4af37';
-      ctx.lineWidth = 8;
-      ctx.strokeRect(20, 20, 560, 810);
-
-      // Text Title Headers
-      ctx.fillStyle = '#d4af37';
-      ctx.font = 'bold 26px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('PASSPORT OF HONOR', 300, 90);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 36px sans-serif';
-      ctx.fillText('SMART CITIZEN', 300, 140);
-
-      // Dynamic User Profile Credentials Frame
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.fillRect(50, 190, 500, 150);
-
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '20px sans-serif';
-      ctx.fillText(`NAME: ${(localStorage.getItem('user_name') || '').toUpperCase()}`, 80, 240);
-      ctx.fillText(`CLASS: ${(localStorage.getItem('user_class') || '').toUpperCase()}`, 80, 290);
-      ctx.fillText(`SECTION: ${(localStorage.getItem('user_section') || '').toUpperCase()}`, 350, 290);
-
-      // Render Checkbox Badges Lists
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#d4af37';
-      ctx.font = 'bold 20px sans-serif';
-      ctx.fillText('COMPLETED NATIONAL MISSIONS', 300, 390);
-
-      const missions = [
-        "1. Mission India 2047", "2. Mission Clean & Green",
-        "3. Mission Healthy India", "4. Mission Digital India",
-        "5. Mission Sustainable India", "6. Smart Cities & Innovation",
-        "7. Mission Space, AI & Tech", "8. Enterprises & Builders"
-      ];
-
-      ctx.textAlign = 'left';
-      missions.forEach((m, idx) => {
-        let y = 440 + (idx * 42);
-        ctx.fillStyle = '#00e676';
-        ctx.beginPath(); ctx.arc(85, y-6, 8, 0, 2*Math.PI); ctx.fill();
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '17px sans-serif';
-        ctx.fillText(m, 115, y);
-      });
-    }
-
-    function downloadPassport() {
-      const canvas = document.getElementById('passportCanvas');
-      const link = document.createElement('a');
-      link.download = `${localStorage.getItem('user_name') || 'Citizen'}_Smart_Passport.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    }
-
-    function resetApp() {
-      if (confirm("Are you sure you want to clear your data and start a new journey?")) {
-        localStorage.clear();
-        location.reload();
-      }
-    }*/
- /*     function updateUI() {
-      const isRegistered = localStorage.getItem('user_registered');
-      
       if (isRegistered) {
         document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
         document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
         document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
-        
-        document.getElementById('input-name').value = localStorage.getItem('user_name');
-        document.getElementById('input-class').value = localStorage.getItem('user_class');
-        document.getElementById('input-section').value = localStorage.getItem('user_section');
-        
-        document.getElementById('section-register').style.opacity = "0.7";
-      } else {
-        document.getElementById('dash-name').textContent = "Not Registered Yet";
-        document.getElementById('dash-class').textContent = "--";
-        document.getElementById('dash-section').textContent = "--";
-        document.getElementById('input-name').value = "";
-        document.getElementById('input-class').value = "";
-        document.getElementById('input-section').value = "";
-        document.getElementById('section-register').style.opacity = "1";
-      }
-
-      const completed = JSON.parse(localStorage.getItem('missions')) || {};
-      let count = 0;
-
-      for (let i = 1; i <= totalMissions; i++) {
-        const item = document.getElementById(`m${i}`);
-        if (completed[i]) {
-          item.classList.add('completed');
-          item.querySelector('.status-icon').textContent = '✅';
-          count++;
-        } else {
-          item.classList.remove('completed');
-          item.querySelector('.status-icon').textContent = '❌';
-        }
-      }
-
-      // Handle locking state and fire the celebratory effects system
-      if (count === totalMissions && isRegistered) {
-        document.getElementById('lock-overlay').style.display = 'none';
-        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
-        drawPassportCanvas();
-        
-        // Trigger the celebratory explosions if it hasn't fired yet during this render session
-        if (!window.hasCelebrated) {
-          window.hasCelebrated = true;
-          startCelebrationBlast();
-            <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
-        }
-      } else {
-        document.getElementById('lock-overlay').style.display = 'block';
-        document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
-        window.hasCelebrated = false;
-      }
-    }*/
-          function updateUI() {
-      const isRegistered = localStorage.getItem('user_registered');
-      
-      if (isRegistered) {
-        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
-        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
-        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
-        
-        document.getElementById('input-name').value = localStorage.getItem('user_name');
-        document.getElementById('input-class').value = localStorage.getItem('user_class');
-        document.getElementById('input-section').value = localStorage.getItem('user_section');
-        
-        document.getElementById('section-register').style.opacity = "0.7";
-      } else {
-        document.getElementById('dash-name').textContent = "Not Registered Yet";
-        document.getElementById('dash-class').textContent = "--";
-        document.getElementById('dash-section').textContent = "--";
-        document.getElementById('input-name').value = "";
-        document.getElementById('input-class').value = "";
-        document.getElementById('input-section').value = "";
-        document.getElementById('section-register').style.opacity = "1";
-      }
-
-      const completed = JSON.parse(localStorage.getItem('missions')) || {};
-      let count = 0;
-
-      for (let i = 1; i <= totalMissions; i++) {
-        const item = document.getElementById(`m${i}`);
-        if (completed[i]) {
-          item.classList.add('completed');
-          item.querySelector('.status-icon').textContent = '✅';
-          count++;
-        } else {
-          item.classList.remove('completed');
-          item.querySelector('.status-icon').textContent = '❌';
-        }
-      }
-
-      // Handle locking state, sound, and fire the celebratory effects system
-      if (count === totalMissions && isRegistered) {
-        document.getElementById('lock-overlay').style.display = 'none';
-        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
-        drawPassportCanvas();
-        
-        // Trigger the celebratory audio and bubbles if it hasn't fired yet
-        if (!window.hasCelebrated) {
-          window.hasCelebrated = true;
-          
-          // Play the audio chime safely
-          const sound = document.getElementById('victorySound');
-          if (sound) {
-            sound.volume = 0.6; // Adjust volume comfort levels
-            sound.play().catch(err => console.log("Audio waiting for user gesture tap to unmute"));
-          }
-          
-          startCelebrationBlast();
-        }
-      } else {
-        document.getElementById('lock-overlay').style.display = 'block';
-        document.getElementById('canvas-wrapper').classList.add('hidden-canvas');
-        window.hasCelebrated = false;
-      }
-    }
-
-
-    // 🎊 LIGHTWEIGHT BUBBLE & CONFETTI CELEBRATION ENGINE
-    function startCelebrationBlast() {
-      const canvas = document.getElementById('celebrationCanvas');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      let particles = [];
-      const colors = ['#d4af37', '#00e676', '#ff9800', '#2196f3', '#e91e63', '#ffffff'];
-
-      // Generate 120 colorful celebratory elements (Bubbles and Confetti bursts)
-      for (let i = 0; i < 120; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: canvas.height + Math.random() * 100, // Spawn just below viewport view frame
-          radius: Math.random() * 8 + 4,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          speedY: -(Math.random() * 4 + 3), // Float floating speeds upwards
-          speedX: Math.random() * 2 - 1,
-          type: Math.random() > 0.5 ? 'bubble' : 'confetti',
-          rotation: Math.random() * 360,
-          rotationSpeed: Math.random() * 4 - 2
-        });
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let alive = false;
-
-        particles.forEach(p => {
-          p.y += p.speedY;
-          p.x += p.speedX;
-          p.rotation += p.rotationSpeed;
-
-          if (p.y > -20) {
-            alive = true; // Keep checking animations frames alive while particles remain on layout
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            
-            if (p.type === 'bubble') {
-              // Render transparent floating bubble circles
-              ctx.beginPath();
-              ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
-              ctx.fillStyle = p.color + '44'; // Add opacity transparency alpha layer
-              ctx.fill();
-              ctx.strokeStyle = p.color;
-              ctx.lineWidth = 1.5;
-              ctx.stroke();
-            } else {
-              // Render standard festive spinning confetti square strips
-              ctx.rotate(p.rotation * Math.PI / 180);
-              ctx.fillStyle = p.color;
-              ctx.fillRect(-p.radius, -p.radius / 2, p.radius * 2, p.radius);
-            }
-            ctx.restore();
-          }
-        });
-
-        if (alive) {
-          requestAnimationFrame(animate);
-        } else {
-          ctx.clearRect(0, 0, canvas.width, canvas.height); // Wipe the board clean completely at finish line
-        }
-      }
-      
-      animate();
-    }
-
-    function drawPassportCanvas() {
-      const canvas = document.getElementById('passportCanvas');
-      const ctx = canvas.getContext('2d');
-
-      let grd = ctx.createLinearGradient(0, 0, 0, 850);
-      grd.addColorStop(0, '#0f2027');
-      grd.addColorStop(0.5, '#203a43');
-      grd.addColorStop(1, '#2c5364');
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, 600, 850);
-
-      ctx.strokeStyle = '#d4af37';
-      ctx.lineWidth = 8;
-      ctx.strokeRect(20, 20, 560, 810);
-
-      ctx.fillStyle = '#d4af37';
-      ctx.font = 'bold 26px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('PASSPORT OF HONOR', 300, 90);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 36px sans-serif';
-      ctx.fillText('SMART CITIZEN', 300, 140);
-
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.fillRect(50, 190, 500, 150);
-
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '20px sans-serif';
-      ctx.fillText(`NAME: ${(localStorage.getItem('user_name') || '').toUpperCase()}`, 80, 240);
-      ctx.fillText(`CLASS: ${(localStorage.getItem('user_class') || '').toUpperCase()}`, 80, 290);
-      ctx.fillText(`SECTION: ${(localStorage.getItem('user_section') || '').toUpperCase()}`, 350, 290);
-
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#d4af37';
-      ctx.font = 'bold 20px sans-serif';
-      ctx.fillText('COMPLETED NATIONAL MISSIONS', 300, 390);
-
-      const missions = [
-        "1. Mission India 2047", "2. Mission Clean & Green",
-        "3. Mission Healthy India", "4. Mission Digital India",
-        "5. Mission Sustainable India", "6. Smart Cities & Innovation",
-        "7. Mission Space, AI & Tech", "8. Enterprises & Builders"
-      ];
-
-      ctx.textAlign = 'left';
-      missions.forEach((m, idx) => {
-        let y = 440 + (idx * 42);
-        ctx.fillStyle = '#00e676';
-        ctx.beginPath(); ctx.arc(85, y-6, 8, 0, 2*Math.PI); ctx.fill();
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '17px sans-serif';
-        ctx.fillText(m, 115, y);
-      });
-    }
-
-    function downloadPassport() {
-      const canvas = document.getElementById('passportCanvas');
-      const link = document.createElement('a');
-      link.download = `${localStorage.getItem('user_name') || 'Citizen'}_Smart_Passport.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    }
-
-    function resetApp() {
-      if (confirm("Are you sure you want to clear your data and start a new journey?")) {
-        localStorage.clear();
-        location.reload();
+        document.getElementById('section-register').style.opacity = "0.6";
       }
     }
   </script>
-
-
-
 </body>
 </html>
