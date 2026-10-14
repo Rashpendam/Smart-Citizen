@@ -159,3 +159,8 @@ button {
   pointer-events: none;
   font-weight: bold;
 }
+/* Bulletproof Screen Visibility Handler */
+.hidden {
+  display: none !important;
+}
+
