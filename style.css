@@ -11,6 +11,7 @@ body {
   max-width: 480px;
   background: #1e1e1e;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  position: relative;
 }
 header {
   background: linear-gradient(135deg, #0f2027, #203a43);
@@ -25,9 +26,11 @@ header {
   padding: 20px;
   border-bottom: 1px solid #333;
 }
+.text-center { text-align: center; }
 h2 { color: #d4af37; margin-top: 0; font-size: 1.25rem; }
 h3 { color: #ffffff; font-size: 1rem; margin: 10px 0 5px 0; font-weight: 500; }
-.instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; }
+.instruction { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
+.hidden { display: none !important; }
 
 .local-input-group input {
   width: 100%;
@@ -49,6 +52,12 @@ button {
   font-weight: bold;
   cursor: pointer;
 }
+.return-hub-btn {
+  background: #00e676;
+  color: #000;
+  margin-top: 20px;
+  font-size: 1rem;
+}
 
 .profile-summary {
   background: #2d2d2d;
@@ -59,25 +68,93 @@ button {
 }
 .profile-summary p { margin: 4px 0; font-size: 0.9rem; }
 
-/* Visual Gallery Container */
-.visual-gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.gallery-item {
-  background: #252525;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #333;
-}
-.app-fluid-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 4px;
-}
+.visual-gallery { display: flex; flex-direction: column; gap: 20px; }
+.gallery-item { background: #252525; padding: 10px; border-radius: 8px; border: 1px solid #333; }
+.app-fluid-img { width: 100%; height: auto; display: block; border-radius: 4px; }
+
+/* STAMP BOOK DYNAMIC MAP BOARD OVERLAYS */
 .stamp-board-container {
   position: relative;
   width: 100%;
+}
+.stamps-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 110px);
+  grid-template-rows: repeat(2, 110px);
+  justify-content: center;
+  align-content: center;
+  gap: 15px;
+}
+.stamp-slot {
+  position: relative;
+  background: rgba(0,0,0,0.4);
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+.stamp-img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  transition: filter 0.3s, opacity 0.3s;
+}
+.opacity-fade {
+  filter: grayscale(100%);
+  opacity: 0.25;
+}
+.badge-overlay {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 0.65rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* INTERMEDIARY SCREEN PASSPORT STAMP VIEW STYLE */
+.passport-stamp-frame {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+}
+.passport-stamp-frame img {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+.ink-stamp-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  border: 4px dashed #e53935;
+  color: #e53935;
+  font-family: 'Impact', sans-serif;
+  font-size: 1.6rem;
+  padding: 8px 15px;
+  text-transform: uppercase;
+  background: rgba(30,30,30,0.85);
+  border-radius: 6px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  font-weight: bold;
 }
