@@ -33,8 +33,8 @@
         </div>
       </main>
 
-      <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
-      <main id="section-dashboard" class="content-section dashboard-box">
+      <!-- STEP 2: VISUAL PASSPORT DASHBOARD (Hidden by default using the 'hidden' class) -->
+      <main id="section-dashboard" class="content-section dashboard-box hidden">
         <h2>Step 2: Your Explorer Dashboard</h2>
         
         <div class="profile-summary">
@@ -103,7 +103,6 @@
       <p class="instruction">Your personalized high-resolution document is ready below. Click download to save it directly into your device photos gallery.</p>
       
       <div class="canvas-container">
-        <!-- High-res canvas template for premium image production -->
         <canvas id="certificateCanvas" width="1000" height="700"></canvas>
       </div>
       
@@ -183,7 +182,6 @@
       localStorage.setItem('user_registered', 'true');
       
       updateUI();
-      document.getElementById('section-dashboard').scrollIntoView({ behavior: 'smooth' });
     }
 
     function showMissionPopupView(id) {
@@ -198,11 +196,10 @@
       hideAllScreens();
       document.getElementById('screen-route-complete').classList.remove('hidden');
       
-      // Fire celebration chime safely
       const sound = document.getElementById('victorySound');
       if (sound) {
         sound.volume = 0.6;
-        sound.play().catch(err => console.log("Audio awaiting screen gesture tap"));
+        sound.play().catch(err => console.log("Audio waiting for user gesture tap"));
       }
       startCelebrationBlast();
       window.scrollTo(0, 0);
@@ -223,3 +220,5 @@
 
     function hideAllScreens() {
       document.getElementById('screen-hub').classList.add('hidden');
+      document.getElementById('screen-mission-alert').classList.add('hidden');
+      document.getElementById('screen-route-complete').classList.add('hidden');
