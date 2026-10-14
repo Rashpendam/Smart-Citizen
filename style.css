@@ -92,14 +92,15 @@ button {
 }
 .stamp-slot {
   position: relative;
-  background: rgba(0,0,0,0.4);
-  border: 1px dashed rgba(255,255,255,0.2);
+  background: transparent; /* Changed from rgba(0,0,0,0.4) to transparent */
+  border: none;             /* Removed the dashed border overlay outline */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: visible;
 }
+
 .stamp-img {
   width: 85%;
   height: 85%;
