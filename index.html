@@ -12,7 +12,13 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- SCREEN A: THE INTERACTIVE APP HUB -->
+    <!-- CELEBRATION EFFECT OVERLAY LAYER -->
+    <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
+
+    <!-- CELEBRATION AUDIO TRACK ASSET -->
+    <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
+
+    <!-- SCREEN 1: INTERACTIVE MAIN DASHBOARD HUB -->
     <div id="screen-hub">
       <!-- STEP 1: REGISTRATION PROFILE -->
       <main id="section-register" class="content-section">
@@ -20,7 +26,7 @@
         <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
         
         <div class="local-input-group">
-          <input type="text" id="input-name" placeholder="Full Name (for Passport)">
+          <input type="text" id="input-name" placeholder="Full Name (for Certificate)">
           <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
           <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
           <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
@@ -57,7 +63,7 @@
             <div class="stamp-board-container">
               <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
               
-              <!-- GRID LAYOUT OVERLAY FOR STAMPS (Renders on top of your stamp board base) -->
+              <!-- GRID LAYOUT OVERLAY FOR STAMPS -->
               <div class="stamps-grid-overlay">
                 <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
                 <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
@@ -72,7 +78,7 @@
       </main>
     </div>
 
-    <!-- SCREEN B: SINGLE MISSION COMPLETED POP-UP VIEW -->
+    <!-- SCREEN 2: SINGLE BOOTH MISSION COMPLETED POP-UP VIEW -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -81,6 +87,28 @@
       </div>
       <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile dashboard tracking asset.</p>
       <button class="return-hub-btn" onclick="closeMissionView()">↩️ Return to Dashboard Hub</button>
+    </div>
+
+    <!-- SCREEN 3: ROUTE FINISHED COMPLETED VIEW -->
+    <div id="screen-route-complete" class="content-section text-center hidden">
+      <h2>🏆 Exhibition Journey Complete!</h2>
+      <p class="instruction">Outstanding work, Smart Citizen! You have successfully gathered all 6 national development stamps.</p>
+      <img src="route_completed.png" alt="Route Journey Finished" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+      <button class="gold-btn" onclick="showCertificateGeneratorView()">Claim & Generate My Certificate ✨</button>
+    </div>
+
+    <!-- SCREEN 4: FINAL CERTIFICATE PRINT AND DOWNLOAD CANVAS WINDOW -->
+    <div id="screen-certificate-render" class="content-section text-center hidden">
+      <h2>Your Official Smart Citizen Certificate</h2>
+      <p class="instruction">Your personalized high-resolution document is ready below. Click download to save it directly into your device photos gallery.</p>
+      
+      <div class="canvas-container">
+        <!-- High-res canvas template for premium image production -->
+        <canvas id="certificateCanvas" width="1000" height="700"></canvas>
+      </div>
+      
+      <button class="download-btn" onclick="downloadCertificate()">📥 Download Image File</button>
+      <button class="back-btn" onclick="resetApp()">🔄 Register New Explorer</button>
     </div>
   </div>
 
@@ -118,16 +146,17 @@
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
         let currentProgress = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
         
-        // Sequential enforcement logic:
         if (unlockId === currentProgress + 1) {
-          // Valid step link scanned! Advance user status
           localStorage.setItem('unlocked_count', unlockId);
           window.history.replaceState({}, document.title, window.location.pathname);
           
-          // Trigger Phase 3 Popup interface immediately
-          showMissionPopupView(unlockId);
+          if (unlockId === totalMissions) {
+            showRouteCompleteScreen();
+          } else {
+            showMissionPopupView(unlockId);
+          }
         } else if (unlockId <= currentProgress) {
-          alert(`You have already completed the ${missionNames[unlockId - 1]}!`);
+          alert(`You have already stamped the ${missionNames[unlockId - 1]}!`);
           window.history.replaceState({}, document.title, window.location.pathname);
         } else {
           alert(`⚠️ Route Out of Order! Please complete Mission ${currentProgress + 1} before scanning this station code.`);
@@ -158,57 +187,39 @@
     }
 
     function showMissionPopupView(id) {
-      document.getElementById('screen-hub').classList.add('hidden');
+      hideAllScreens();
       document.getElementById('screen-mission-alert').classList.remove('hidden');
-      
       document.getElementById('mission-alert-title').textContent = missionNames[id - 1];
       document.getElementById('mission-alert-img').src = missionFiles[id - 1];
       window.scrollTo(0, 0);
     }
 
+    function showRouteCompleteScreen() {
+      hideAllScreens();
+      document.getElementById('screen-route-complete').classList.remove('hidden');
+      
+      // Fire celebration chime safely
+      const sound = document.getElementById('victorySound');
+      if (sound) {
+        sound.volume = 0.6;
+        sound.play().catch(err => console.log("Audio awaiting screen gesture tap"));
+      }
+      startCelebrationBlast();
+      window.scrollTo(0, 0);
+    }
+
+    function showCertificateGeneratorView() {
+      hideAllScreens();
+      document.getElementById('screen-certificate-render').classList.remove('hidden');
+      drawCertificateCanvas();
+      window.scrollTo(0, 0);
+    }
+
     function closeMissionView() {
-      document.getElementById('screen-mission-alert').classList.add('hidden');
+      hideAllScreens();
       document.getElementById('screen-hub').classList.remove('hidden');
       updateUI();
     }
 
-    function updateUI() {
-      const isRegistered = localStorage.getItem('user_registered');
-      if (isRegistered) {
-        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
-        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
-        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
-        document.getElementById('section-register').style.opacity = "0.6";
-        
-        document.getElementById('input-name').value = localStorage.getItem('user_name');
-        document.getElementById('input-class').value = localStorage.getItem('user_class');
-        document.getElementById('input-section').value = localStorage.getItem('user_section');
-      } else {
-        document.getElementById('dash-name').textContent = "Not Registered Yet";
-        document.getElementById('dash-class').textContent = "--";
-        document.getElementById('dash-section').textContent = "--";
-        document.getElementById('section-register').style.opacity = "1";
-      }
-
-      const count = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
-      
-      // Update Stamp board grid layout blocks
-      for (let i = 1; i <= totalMissions; i++) {
-        const slot = document.getElementById(`slot-${i}`);
-        const img = slot.querySelector('.stamp-img');
-        const badge = slot.querySelector('.badge-overlay');
-        
-        if (i <= count) {
-          img.classList.remove('opacity-fade');
-          badge.textContent = '✅';
-          badge.style.background = '#00e676';
-        } else {
-          img.classList.add('opacity-fade');
-          badge.textContent = '❌';
-          badge.style.background = '#e53935';
-        }
-      }
-    }
-  </script>
-</body>
-</html>
+    function hideAllScreens() {
+      document.getElementById('screen-hub').classList.add('hidden');
