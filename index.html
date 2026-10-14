@@ -33,7 +33,7 @@
         </div>
       </main>
 
-      <!-- STEP 2: VISUAL PASSPORT DASHBOARD (Hidden by default using the 'hidden' class) -->
+      <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
       <main id="section-dashboard" class="content-section dashboard-box hidden">
         <h2>Step 2: Your Explorer Dashboard</h2>
         
@@ -144,9 +144,10 @@
 
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
         let currentProgress = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
+        if (isNaN(currentProgress)) currentProgress = 0;
         
         if (unlockId === currentProgress + 1) {
-          localStorage.setItem('unlocked_count', unlockId);
+          localStorage.setItem('unlocked_count', unlockId.toString());
           window.history.replaceState({}, document.title, window.location.pathname);
           
           if (unlockId === totalMissions) {
@@ -181,7 +182,13 @@
       localStorage.setItem('user_section', sec);
       localStorage.setItem('user_registered', 'true');
       
+      // If count is missing, default it to 0 so the stamp check loop runs safely
+      if (!localStorage.getItem('unlocked_count')) {
+        localStorage.setItem('unlocked_count', '0');
+      }
+      
       updateUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showMissionPopupView(id) {
@@ -199,7 +206,7 @@
       const sound = document.getElementById('victorySound');
       if (sound) {
         sound.volume = 0.6;
-        sound.play().catch(err => console.log("Audio waiting for user gesture tap"));
+        sound.play().catch(err => console.log("Audio waiting for user gesture"));
       }
       startCelebrationBlast();
       window.scrollTo(0, 0);
@@ -218,7 +225,3 @@
       updateUI();
     }
 
-    function hideAllScreens() {
-      document.getElementById('screen-hub').classList.add('hidden');
-      document.getElementById('screen-mission-alert').classList.add('hidden');
-      document.getElementById('screen-route-complete').classList.add('hidden');
