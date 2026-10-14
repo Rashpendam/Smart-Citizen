@@ -163,4 +163,17 @@ button {
 .hidden {
   display: none !important;
 }
+.hidden-canvas {
+  display: none !important;
+}
+#lock-overlay {
+  background: #252525;
+  padding: 30px;
+  text-align: center;
+  border-radius: 6px;
+  color: #ff9800;
+  border: 1px dashed #ff9800;
+  font-weight: bold;
+  margin-top: 15px;
+}
 
