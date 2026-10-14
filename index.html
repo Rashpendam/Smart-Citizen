@@ -18,64 +18,61 @@
     <!-- CELEBRATION AUDIO TRACK ASSET -->
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- SCREEN 1: INTERACTIVE MAIN DASHBOARD HUB -->
-    <div id="screen-hub">
-      <!-- STEP 1: REGISTRATION PROFILE -->
-      <main id="section-register" class="content-section">
-        <h2>Step 1: Create Your Profile</h2>
-        <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
-        
-        <div class="local-input-group">
-          <input type="text" id="input-name" placeholder="Full Name (for Certificate)">
-          <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
-          <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
-          <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
-        </div>
-      </main>
+    <!-- STEP 1: REGISTRATION PANEL -->
+    <div id="screen-register" class="content-section">
+      <h2>Step 1: Create Your Profile</h2>
+      <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
+      
+      <div class="local-input-group">
+        <input type="text" id="input-name" placeholder="Full Name (for Certificate)">
+        <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
+        <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
+        <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
+      </div>
+    </div>
 
-      <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
-      <main id="section-dashboard" class="content-section dashboard-box hidden">
-        <h2>Step 2: Your Explorer Dashboard</h2>
-        
-        <div class="profile-summary">
-          <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
-          <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
-        </div>
+    <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
+    <div id="screen-dashboard" class="content-section dashboard-box hidden">
+      <h2>Step 2: Your Explorer Dashboard</h2>
+      
+      <div class="profile-summary">
+        <p>Citizen: <strong id="dash-name">--</strong></p>
+        <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
+      </div>
 
-        <div class="visual-gallery">
-          <div class="gallery-item">
-            <h3>1. Visitor Passport</h3>
-            <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
-          </div>
-          
-          <div class="gallery-item">
-            <h3>2. Welcome Banner</h3>
-            <img src="welcome.png" alt="Welcome Image" class="app-fluid-img">
-          </div>
-          
-          <div class="gallery-item">
-            <h3>3. Exhibition Route Map</h3>
-            <img src="route_map.png" alt="Exhibition Route Map" class="app-fluid-img">
-          </div>
-          
-          <div class="gallery-item">
-            <h3>4. Your Stamp Collection Board</h3>
-            <div class="stamp-board-container">
-              <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
-              
-              <!-- GRID LAYOUT OVERLAY FOR STAMPS -->
-              <div class="stamps-grid-overlay">
-                <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              </div>
+      <div class="visual-gallery">
+        <div class="gallery-item">
+          <h3>1. Visitor Passport</h3>
+          <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
+        </div>
+        
+        <div class="gallery-item">
+          <h3>2. Welcome Banner</h3>
+          <img src="welcome.png" alt="Welcome Image" class="app-fluid-img">
+        </div>
+        
+        <div class="gallery-item">
+          <h3>3. Exhibition Route Map</h3>
+          <img src="route_map.png" alt="Exhibition Route Map" class="app-fluid-img">
+        </div>
+        
+        <div class="gallery-item">
+          <h3>4. Your Stamp Collection Board</h3>
+          <div class="stamp-board-container">
+            <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
+            
+            <!-- GRID LAYOUT OVERLAY FOR STAMPS -->
+            <div class="stamps-grid-overlay">
+              <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
 
     <!-- SCREEN 2: SINGLE BOOTH MISSION COMPLETED POP-UP VIEW -->
@@ -113,22 +110,8 @@
 
   <script>
     const totalMissions = 6;
-    const missionFiles = [
-      "green_citizen.png",
-      "healthy_citizen.png",
-      "digital_citizen.png",
-      "sustainable_india.png",
-      "innovation_citizen.png",
-      "young_entrepreneur.png"
-    ];
-    const missionNames = [
-      "1. Green Citizen Mission",
-      "2. Healthy Citizen Mission",
-      "3. Digital Citizen Mission",
-      "4. Sustainable India Mission",
-      "5. Innovation Citizen Mission",
-      "6. Young Entrepreneur Mission"
-    ];
+    const missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
+    const missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
 
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -138,8 +121,6 @@
       if (isNewStart === 'true') {
         localStorage.clear();
         window.history.replaceState({}, document.title, window.location.pathname);
-        updateUI();
-        return;
       }
 
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
@@ -151,9 +132,9 @@
           window.history.replaceState({}, document.title, window.location.pathname);
           
           if (unlockId === totalMissions) {
-            showRouteCompleteScreen();
+            localStorage.setItem('show_final', 'true');
           } else {
-            showMissionPopupView(unlockId);
+            localStorage.setItem('show_popup', unlockId.toString());
           }
         } else if (unlockId <= currentProgress) {
           alert(`You have already stamped the ${missionNames[unlockId - 1]}!`);
@@ -182,46 +163,39 @@
       localStorage.setItem('user_section', sec);
       localStorage.setItem('user_registered', 'true');
       
-      // If count is missing, default it to 0 so the stamp check loop runs safely
-      if (!localStorage.getItem('unlocked_count')) {
-        localStorage.setItem('unlocked_count', '0');
-      }
-      
-      updateUI();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function showMissionPopupView(id) {
-      hideAllScreens();
-      document.getElementById('screen-mission-alert').classList.remove('hidden');
-      document.getElementById('mission-alert-title').textContent = missionNames[id - 1];
-      document.getElementById('mission-alert-img').src = missionFiles[id - 1];
-      window.scrollTo(0, 0);
-    }
-
-    function showRouteCompleteScreen() {
-      hideAllScreens();
-      document.getElementById('screen-route-complete').classList.remove('hidden');
-      
-      const sound = document.getElementById('victorySound');
-      if (sound) {
-        sound.volume = 0.6;
-        sound.play().catch(err => console.log("Audio waiting for user gesture"));
-      }
-      startCelebrationBlast();
-      window.scrollTo(0, 0);
-    }
-
-    function showCertificateGeneratorView() {
-      hideAllScreens();
-      document.getElementById('screen-certificate-render').classList.remove('hidden');
-      drawCertificateCanvas();
-      window.scrollTo(0, 0);
-    }
-
-    function closeMissionView() {
-      hideAllScreens();
-      document.getElementById('screen-hub').classList.remove('hidden');
       updateUI();
     }
 
+    function updateUI() {
+      const isRegistered = localStorage.getItem('user_registered') === 'true';
+      const showPopupId = localStorage.getItem('show_popup');
+      const showFinal = localStorage.getItem('show_final') === 'true';
+
+      // Hide all panels initially to prevent overlap issues
+      document.getElementById('screen-register').classList.add('hidden');
+      document.getElementById('screen-dashboard').classList.add('hidden');
+      document.getElementById('screen-mission-alert').classList.add('hidden');
+      document.getElementById('screen-route-complete').classList.add('hidden');
+      document.getElementById('screen-certificate-render').classList.add('hidden');
+
+      if (!isRegistered) {
+        // Show only registration form if anonymous
+        document.getElementById('screen-register').classList.remove('hidden');
+        return;
+      }
+
+      // If registered, route to appropriate active view pane
+      if (showFinal) {
+        document.getElementById('screen-route-complete').classList.remove('hidden');
+        if (!window.hasCelebrated) {
+          window.hasCelebrated = true;
+          const sound = document.getElementById('victorySound');
+          if (sound) { sound.volume = 0.6; sound.play().catch(e => console.log(e)); }
+          startCelebrationBlast();
+        }
+      } else if (showPopupId) {
+        const id = parseInt(showPopupId, 10);
+        document.getElementById('screen-mission-alert').classList.remove('hidden');
+        document.getElementById('mission-alert-title').textContent = missionNames[id - 1];
+        document.getElementById('mission-alert-img').src = missionFiles[id - 1];
+      } else {
