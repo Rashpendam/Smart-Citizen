@@ -12,99 +12,107 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- CELEBRATION EFFECT OVERLAY LAYER -->
+    <!-- CELEBRATION FLOATING EFFECT CANVAS OVERLAY LAYER -->
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
 
-    <!-- CELEBRATION AUDIO TRACK ASSET -->
+    <!-- CELEBRATION AUDIO NOTIFICATION CHIME ASSET -->
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- STEP 1: REGISTRATION PANEL -->
-    <div id="screen-register" class="content-section">
-      <h2>Step 1: Create Your Profile</h2>
-      <p class="instruction">Enter your details to generate your digital passport dashboard.</p>
-      
-      <div class="local-input-group">
-        <input type="text" id="input-name" placeholder="Full Name (for Certificate)">
-        <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
-        <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
-        <button id="start-btn" onclick="registerUser()">Activate Passport Profile 🚀</button>
+    <!-- INTERMEDIARY VIEW PANEL: POPUP DISPLAY TRIGGERED ON RUNTIME SCANS -->
+    <div id="screen-mission-alert" class="content-section text-center hidden">
+      <h2 id="mission-alert-title">Mission Cleared!</h2>
+      <div class="passport-stamp-frame">
+        <img id="mission-alert-img" src="green_citizen.png" alt="Mission State Graphic Asset Image">
+        <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
       </div>
+      <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your layout tracking dashboard below.</p>
+      <button class="return-hub-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
-    <!-- STEP 2: VISUAL PASSPORT DASHBOARD -->
-    <div id="screen-dashboard" class="content-section dashboard-box hidden">
-      <h2>Step 2: Your Explorer Dashboard</h2>
+    <!-- MAIN INTERACTIVE STREAM (Everything stays stacked inside this main container) -->
+    <div id="screen-main-layout">
       
-      <div class="profile-summary">
-        <p>Citizen: <strong id="dash-name">--</strong></p>
-        <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
+      <!-- STEP 1: DYNAMIC PROFILE REGISTRATION FORM CARD -->
+      <div id="section-register" class="content-section">
+        <h2>Step 1: Create Your Profile</h2>
+        <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
+        
+        <div class="local-input-group">
+          <input type="text" id="input-name" placeholder="Full Name (for Certificate)">
+          <input type="text" id="input-class" placeholder="Class (e.g., IX, X)">
+          <input type="text" id="input-section" placeholder="Section (e.g., A, B)">
+          <button id="start-btn" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
+        </div>
       </div>
 
-      <div class="visual-gallery">
-        <div class="gallery-item">
-          <h3>1. Visitor Passport</h3>
-          <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
+      <!-- STEP 2: PROFILE SUMMARY HEADLINE BANNER -->
+      <div class="content-section dashboard-box">
+        <h2>Step 2: Your Explorer Status</h2>
+        <div class="profile-summary">
+          <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
+          <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
         </div>
-        
-        <div class="gallery-item">
-          <h3>2. Welcome Banner</h3>
-          <img src="welcome.png" alt="Welcome Image" class="app-fluid-img">
-        </div>
-        
-        <div class="gallery-item">
-          <h3>3. Exhibition Route Map</h3>
-          <img src="route_map.png" alt="Exhibition Route Map" class="app-fluid-img">
-        </div>
-        
-        <div class="gallery-item">
-          <h3>4. Your Stamp Collection Board</h3>
-          <div class="stamp-board-container">
-            <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
-            
-            <!-- GRID LAYOUT OVERLAY FOR STAMPS -->
-            <div class="stamps-grid-overlay">
-              <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+        <p class="instruction">Visit each venue exhibition booth and scan its unique QR code code layout to collect your national milestone badges!</p>
+      </div>
+
+      <!-- STEP 3: PHOTO CARDS VERTICAL DASHBOARD GALLERY -->
+      <div class="content-section dashboard-box">
+        <div class="visual-gallery">
+          <div class="gallery-item">
+            <h3>1. Visitor Passport</h3>
+            <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
+          </div>
+          
+          <div class="gallery-item">
+            <h3>2. Welcome Banner</h3>
+            <img src="welcome.png" alt="Welcome Graphic Image Banner" class="app-fluid-img">
+          </div>
+          
+          <div class="gallery-item">
+            <h3>3. Exhibition Route Map</h3>
+            <img src="route_map.png" alt="Exhibition Floor Route Map Layout" class="app-fluid-img">
+          </div>
+          
+          <div class="gallery-item">
+            <h3>4. Your Stamp Collection Board</h3>
+            <div class="stamp-board-container">
+              <img src="stamp_board.png" alt="Stamp Board Background Canvas" class="app-fluid-img">
+              
+              <!-- GRID LAYOUT STAMPS HOVER IMAGE GRID SYSTEM -->
+              <div class="stamps-grid-overlay">
+                <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- SCREEN 2: SINGLE BOOTH MISSION COMPLETED POP-UP VIEW -->
-    <div id="screen-mission-alert" class="content-section text-center hidden">
-      <h2 id="mission-alert-title">Mission Cleared!</h2>
-      <div class="passport-stamp-frame">
-        <img id="mission-alert-img" src="green_citizen.png" alt="Mission State Image">
-        <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
+      <!-- STEP 4: GRAND FINALE CERTIFICATE OUTPUT AND DOWNLOAD BOX PANEL -->
+      <div class="content-section text-center">
+        <h2>Step 3: Reward Generation</h2>
+        
+        <!-- Standard Lock status layer shown while journey milestones are incomplete -->
+        <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
+        
+        <!-- Unlocked output framework rendering blocks -->
+        <div id="canvas-wrapper" class="hidden-canvas">
+          <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
+          <img src="route_completed.png" alt="Route Complete Celebration Graphic" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+          
+          <div class="canvas-container" style="margin-bottom: 15px;">
+            <canvas id="certificateCanvas" width="1000" height="700"></canvas>
+          </div>
+          
+          <button class="download-btn" onclick="downloadCertificate()">📥 Download Certificate File</button>
+          <button class="back-btn" onclick="resetApp()">🔄 Clear Memory & Restart Route</button>
+        </div>
       </div>
-      <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile dashboard tracking asset.</p>
-      <button class="return-hub-btn" onclick="closeMissionView()">↩️ Return to Dashboard Hub</button>
-    </div>
 
-    <!-- SCREEN 3: ROUTE FINISHED COMPLETED VIEW -->
-    <div id="screen-route-complete" class="content-section text-center hidden">
-      <h2>🏆 Exhibition Journey Complete!</h2>
-      <p class="instruction">Outstanding work, Smart Citizen! You have successfully gathered all 6 national development stamps.</p>
-      <img src="route_completed.png" alt="Route Journey Finished" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-      <button class="gold-btn" onclick="showCertificateGeneratorView()">Claim & Generate My Certificate ✨</button>
-    </div>
-
-    <!-- SCREEN 4: FINAL CERTIFICATE PRINT AND DOWNLOAD CANVAS WINDOW -->
-    <div id="screen-certificate-render" class="content-section text-center hidden">
-      <h2>Your Official Smart Citizen Certificate</h2>
-      <p class="instruction">Your personalized high-resolution document is ready below. Click download to save it directly into your device photos gallery.</p>
-      
-      <div class="canvas-container">
-        <canvas id="certificateCanvas" width="1000" height="700"></canvas>
-      </div>
-      
-      <button class="download-btn" onclick="downloadCertificate()">📥 Download Image File</button>
-      <button class="back-btn" onclick="resetApp()">🔄 Register New Explorer</button>
     </div>
   </div>
 
@@ -131,11 +139,11 @@
           localStorage.setItem('unlocked_count', unlockId.toString());
           window.history.replaceState({}, document.title, window.location.pathname);
           
-          if (unlockId === totalMissions) {
-            localStorage.setItem('show_final', 'true');
-          } else {
-            localStorage.setItem('show_popup', unlockId.toString());
-          }
+          // Interrupt standard list flow to trigger pop-up modal panel view
+          document.getElementById('screen-main-layout').classList.add('hidden');
+          document.getElementById('screen-mission-alert').classList.remove('hidden');
+          document.getElementById('mission-alert-title').textContent = missionNames[unlockId - 1];
+          document.getElementById('mission-alert-img').src = missionFiles[unlockId - 1];
         } else if (unlockId <= currentProgress) {
           alert(`You have already stamped the ${missionNames[unlockId - 1]}!`);
           window.history.replaceState({}, document.title, window.location.pathname);
@@ -154,7 +162,7 @@
       const sec = document.getElementById('input-section').value.trim();
 
       if (!name || !cls || !sec) {
-        alert("Please fill in your Name, Class, and Section!");
+        alert("Please enter Name, Class, and Section coordinates!");
         return;
       }
 
@@ -164,38 +172,21 @@
       localStorage.setItem('user_registered', 'true');
       
       updateUI();
+      alert("Profile Saved! Scroll down to track your stamp records.");
+    }
+
+    function closeMissionView() {
+      document.getElementById('screen-mission-alert').classList.add('hidden');
+      document.getElementById('screen-main-layout').classList.remove('hidden');
+      updateUI();
     }
 
     function updateUI() {
       const isRegistered = localStorage.getItem('user_registered') === 'true';
-      const showPopupId = localStorage.getItem('show_popup');
-      const showFinal = localStorage.getItem('show_final') === 'true';
-
-      // Hide all panels initially to prevent overlap issues
-      document.getElementById('screen-register').classList.add('hidden');
-      document.getElementById('screen-dashboard').classList.add('hidden');
-      document.getElementById('screen-mission-alert').classList.add('hidden');
-      document.getElementById('screen-route-complete').classList.add('hidden');
-      document.getElementById('screen-certificate-render').classList.add('hidden');
-
-      if (!isRegistered) {
-        // Show only registration form if anonymous
-        document.getElementById('screen-register').classList.remove('hidden');
-        return;
-      }
-
-      // If registered, route to appropriate active view pane
-      if (showFinal) {
-        document.getElementById('screen-route-complete').classList.remove('hidden');
-        if (!window.hasCelebrated) {
-          window.hasCelebrated = true;
-          const sound = document.getElementById('victorySound');
-          if (sound) { sound.volume = 0.6; sound.play().catch(e => console.log(e)); }
-          startCelebrationBlast();
-        }
-      } else if (showPopupId) {
-        const id = parseInt(showPopupId, 10);
-        document.getElementById('screen-mission-alert').classList.remove('hidden');
-        document.getElementById('mission-alert-title').textContent = missionNames[id - 1];
-        document.getElementById('mission-alert-img').src = missionFiles[id - 1];
-      } else {
+      
+      if (isRegistered) {
+        document.getElementById('dash-name').textContent = localStorage.getItem('user_name');
+        document.getElementById('dash-class').textContent = localStorage.getItem('user_class');
+        document.getElementById('dash-section').textContent = localStorage.getItem('user_section');
+        
+        // Put input texts back inside value structures to indicate active locks
