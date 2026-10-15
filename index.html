@@ -2,181 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Smart Citizen Passport</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Citizen Registration</title>
   <link rel="stylesheet" href="style.css">
-  <meta name="theme-color" content="#0f2027">
 </head>
 <body>
   <div class="app-shell">
-    <header>🛡️ National Smart Citizen Journey</header>
-    
-    <!-- FLOATING CELEBRATION EFFECTS -->
-    <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
-    <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
-
-    <!-- BOOTH SCAN POPUP MODAL -->
-    <div id="screen-mission-alert" class="content-section text-center hidden">
-      <h2 id="mission-alert-title">Mission Cleared!</h2>
-      <div class="passport-stamp-frame">
-        <img id="mission-alert-img" src="green_citizen.png" alt="Mission Clear Graphic">
-        <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
-      </div>
-      <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub layout below.</p>
-      <button class="return-hub-btn" type="button" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
-    </div>
-
-    <!-- MAIN INTERACTIVE HUB STREAM -->
-    <div id="screen-main-layout">
+    <header>🛡️ National Smart Citizen Registration</header>
+    <div class="content-section">
+      <h2>Step 1: Enter Profile Details</h2>
+      <p class="instruction">Enter your details below to generate your live digital exhibition stamp card pass.</p>
       
-      <!-- STEP 1: REAL-TIME KEYBOARD TYPING SLOTS -->
-      <div class="content-section">
-        <h2>Step 1: Enter Profile Details</h2>
-        <p class="instruction">Type your official details below to instantly activate your tracking profile metrics.</p>
-        
+      <!-- Standard HTML Form processing handles data routing automatically across all mobile screens -->
+      <form action="dashboard.html" method="GET">
         <div class="local-input-group">
-          <!-- Live-sync typing system updates your board with every single letter typed -->
-          <input type="text" id="input-name" placeholder="Type Your Full Name" onkeyup="syncTypingValues()" onchange="syncTypingValues()">
-          <input type="text" id="input-class" placeholder="Type Your Class" onkeyup="syncTypingValues()" onchange="syncTypingValues()">
-          <input type="text" id="input-section" placeholder="Type Your Section" onkeyup="syncTypingValues()" onchange="syncTypingValues()">
+          <input type="text" name="name" placeholder="Type Your Full Name" required>
+          <input type="text" name="class" placeholder="Type Your Class" required>
+          <input type="text" name="section" placeholder="Type Your Section" required>
+          <button type="submit">Activate My Passport Card 🚀</button>
         </div>
-      </div>
-
-      <!-- STEP 2: RUNTIME PREVIEW DISPLAY BANNER -->
-      <div class="content-section dashboard-box">
-        <h2>Step 2: Your Explorer Status</h2>
-        <div class="profile-summary" id="status-banner">
-          <p>Citizen Name: <strong id="dash-name" style="color: #d4af37;">Not Registered Yet</strong></p>
-          <p>Class Group: <span id="dash-class">--</span> | Section Room: <span id="dash-section">--</span></p>
-        </div>
-      </div>
-
-      <!-- STEP 3: EXPLORER GRAPHIC CARD GALLERIES -->
-      <div class="content-section dashboard-box">
-        <div class="visual-gallery">
-          <div class="gallery-item">
-            <h3>1. Visitor Passport</h3>
-            <img src="passport_bg.png" alt="Visitor Passport Background" class="app-fluid-img">
-          </div>
-          
-          <div class="gallery-item">
-            <h3>2. Welcome Banner</h3>
-            <img src="welcome.png" alt="Welcome Image Banner" class="app-fluid-img">
-          </div>
-          
-          <div class="gallery-item">
-            <h3>3. Exhibition Route Map</h3>
-            <img src="route_map.png" alt="Route Map" class="app-fluid-img">
-          </div>
-          
-          <div class="gallery-item">
-            <h3>4. Your Stamp Collection Board</h3>
-            <div class="stamp-board-container" style="position: relative;">
-              
-              <!-- Lock Filter Panel covering stamp grid until names contain characters values -->
-              <div id="board-lock-msg" style="position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); color:#ff9800; font-weight:bold; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:4px; z-index:10; text-align:center; padding:20px; box-sizing:border-box;">
-                <span>🔒 Stamp Board Locked</span>
-                <span style="font-size:0.8rem; color:#aaa; font-weight:normal; margin-top:5px;">Please begin typing your name into Step 1 to unlock your live stamp board!</span>
-              </div>
-
-              <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
-              
-              <!-- STAMP IMAGES MATRIX GRID LAYER -->
-              <div class="stamps-grid-overlay">
-                <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-                <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 4: PREMIUM REWARD GENERATION DOCUMENT LAYOUT -->
-      <div class="content-section text-center">
-        <h2>Step 3: Reward Generation</h2>
-        <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
-        
-        <div id="canvas-wrapper" class="hidden-canvas">
-          <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
-          <img src="route_completed.png" alt="Route Complete Celebration Graphic" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-          
-          <div class="canvas-container" style="margin-bottom: 15px;">
-            <canvas id="certificateCanvas" width="1000" height="700"></canvas>
-          </div>
-          
-          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
-          <button class="back-btn" type="button" onclick="resetApp()">🔄 Clear Memory & Restart Route</button>
-        </div>
-      </div>
-
+      </form>
     </div>
   </div>
-
-  <script>
-    var totalMissions = 6;
-    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
-    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
-
-    window.addEventListener('DOMContentLoaded', function() {
-      var urlParams = new URLSearchParams(window.location.search);
-      var unlockId = parseInt(urlParams.get('unlock'), 10);
-      var isNewStart = urlParams.get('start');
-      
-      if (isNewStart === 'true') {
-        localStorage.clear();
-        window.history.replaceState({}, document.title, window.location.pathname);
-        updateUI();
-        return;
-      }
-
-      if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
-        var isRegistered = localStorage.getItem('user_registered') === 'true';
-        if (!isRegistered) {
-          alert("⚠️ Registration Required! Please type your name into the fields in Step 1 first.");
-          window.history.replaceState({}, document.title, window.location.pathname);
-          updateUI();
-          return;
-        }
-
-        var currentProgress = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
-        if (isNaN(currentProgress)) currentProgress = 0;
-        
-        if (unlockId === currentProgress + 1) {
-          localStorage.setItem('unlocked_count', unlockId.toString());
-          window.history.replaceState({}, document.title, window.location.pathname);
-          
-          document.getElementById('screen-main-layout').classList.add('hidden');
-          document.getElementById('screen-mission-alert').classList.remove('hidden');
-          document.getElementById('mission-alert-title').textContent = missionNames[unlockId - 1];
-          document.getElementById('mission-alert-img').src = missionFiles[unlockId - 1];
-        } else if (unlockId <= currentProgress) {
-          alert("You have already stamped this mission!");
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } else {
-          alert("⚠️ Route Out of Order! Please complete previous missions first.");
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
-      }
-
-      // Check if user text values exist on refresh
-      if (localStorage.getItem('user_registered') === 'true') {
-        document.getElementById('input-name').value = localStorage.getItem('user_name') || '';
-        document.getElementById('input-class').value = localStorage.getItem('user_class') || '';
-        document.getElementById('input-section').value = localStorage.getItem('user_section') || '';
-      }
-
-      updateUI();
-    });
-
-    // Pure keyboard string event hook synchronizes values on every single keystroke
-    function syncTypingValues() {
-      var nameVal = document.getElementById('input-name').value.trim();
-      var classVal = document.getElementById('input-class').value.trim();
-      var secVal = document.getElementById('input-section').value.trim();
-
-      if (nameVal && classVal && secVal) {
-        localStorage.setItem('user_name', nameVal);
+</body>
+</html>
