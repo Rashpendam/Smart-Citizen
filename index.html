@@ -12,7 +12,7 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- CELEBRATION EFFECT OVERLAY LAYER -->
+    <!-- CELEBRATION FLOATING EFFECT OVERLAY LAYER -->
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
@@ -123,29 +123,26 @@
     const missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
     const missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const unlockId = parseInt(urlParams.get('unlock'), 10);
-      const isNewStart = urlParams.get('start');
+    window.addEventListener('DOMContentLoaded', function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var unlockId = parseInt(urlParams.get('unlock'), 10);
+      var isNewStart = urlParams.get('start');
       
       if (isNewStart === 'true') {
         localStorage.clear();
         window.history.replaceState({}, document.title, window.location.pathname);
-        updateUI();
-        return;
       }
 
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
-        const isRegistered = localStorage.getItem('user_registered') === 'true';
-        
+        var isRegistered = localStorage.getItem('user_registered') === 'true';
         if (!isRegistered) {
-          alert("⚠️ Registration Required! Please scroll to Step 1 and create your profile first before logging booth milestone stamps.");
+          alert("⚠️ Registration Required! Please complete Step 1 first.");
           window.history.replaceState({}, document.title, window.location.pathname);
           updateUI();
           return;
         }
 
-        let currentProgress = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
+        var currentProgress = parseInt(localStorage.getItem('unlocked_count') || '0', 10);
         if (isNaN(currentProgress)) currentProgress = 0;
         
         if (unlockId === currentProgress + 1) {
@@ -157,10 +154,10 @@
           document.getElementById('mission-alert-title').textContent = missionNames[unlockId - 1];
           document.getElementById('mission-alert-img').src = missionFiles[unlockId - 1];
         } else if (unlockId <= currentProgress) {
-          alert(`You have already stamped the ${missionNames[unlockId - 1]}!`);
+          alert("You have already stamped this mission!");
           window.history.replaceState({}, document.title, window.location.pathname);
         } else {
-          alert(`⚠️ Route Out of Order! Please complete Mission ${currentProgress + 1} before scanning this station code.`);
+          alert("⚠️ Route Out of Order! Please complete previous missions first.");
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       }
@@ -169,18 +166,18 @@
     });
 
     function registerUser() {
-      const name = document.getElementById('input-name').value.trim();
-      const cls = document.getElementById('input-class').value.trim();
-      const sec = document.getElementById('input-section').value.trim();
+      var nameVal = document.getElementById('input-name').value.trim();
+      var classVal = document.getElementById('input-class').value.trim();
+      var secVal = document.getElementById('input-section').value.trim();
 
-      if (!name || !cls || !sec) {
-        alert("Please fill out your Name, Class, and Section fields completely!");
+      if (!nameVal || !classVal || !secVal) {
+        alert("Please fill out your Name, Class, and Section completely!");
         return;
       }
 
-      localStorage.setItem('user_name', name);
-      localStorage.setItem('user_class', cls);
-      localStorage.setItem('user_section', sec);
+      localStorage.setItem('user_name', nameVal);
+      localStorage.setItem('user_class', classVal);
+      localStorage.setItem('user_section', secVal);
       localStorage.setItem('user_registered', 'true');
       
       if (!localStorage.getItem('unlocked_count')) {
@@ -188,3 +185,8 @@
       }
       
       updateUI();
+      document.getElementById('status-banner').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeMissionView() {
+      document.getElementById('screen-mission-alert').classList.add('hidden');
