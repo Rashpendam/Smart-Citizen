@@ -14,8 +14,6 @@
     
     <!-- CELEBRATION EFFECT OVERLAY LAYER -->
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
-
-    <!-- CELEBRATION AUDIO TRACK -->
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
     <!-- BOOTH SCAN POPUP (Only pops up when a booth QR is scanned) -->
@@ -37,13 +35,12 @@
         <h2>Step 1: Create Your Profile</h2>
         <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
         
-                <div class="local-input-group">
+        <div class="local-input-group">
           <input type="text" id="input-name" placeholder="Type Your Full Name">
           <input type="text" id="input-class" placeholder="Type Your Class">
           <input type="text" id="input-section" placeholder="Type Your Section">
           <button id="start-btn" type="button" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
         </div>
-
       </div>
 
       <!-- STEP 2: PROFILE STATUS RUNTIME PREVIEW -->
@@ -131,7 +128,6 @@
       const unlockId = parseInt(urlParams.get('unlock'), 10);
       const isNewStart = urlParams.get('start');
       
-      // 1. CLEAR EVERYTHING ONLY ON EXPLICIT NEW GATE SCAN (?start=true)
       if (isNewStart === 'true') {
         localStorage.clear();
         window.history.replaceState({}, document.title, window.location.pathname);
@@ -139,7 +135,6 @@
         return;
       }
 
-      // 2. CHECK DYNAMIC BOOTH SCAN ARGUMENTS
       if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
         const isRegistered = localStorage.getItem('user_registered') === 'true';
         
@@ -157,7 +152,6 @@
           localStorage.setItem('unlocked_count', unlockId.toString());
           window.history.replaceState({}, document.title, window.location.pathname);
           
-          // Switch display context loops to popup modal panels
           document.getElementById('screen-main-layout').classList.add('hidden');
           document.getElementById('screen-mission-alert').classList.remove('hidden');
           document.getElementById('mission-alert-title').textContent = missionNames[unlockId - 1];
@@ -187,3 +181,10 @@
       localStorage.setItem('user_name', name);
       localStorage.setItem('user_class', cls);
       localStorage.setItem('user_section', sec);
+      localStorage.setItem('user_registered', 'true');
+      
+      if (!localStorage.getItem('unlocked_count')) {
+        localStorage.setItem('unlocked_count', '0');
+      }
+      
+      updateUI();
