@@ -12,11 +12,11 @@
   <div class="app-shell">
     <header>🛡️ National Smart Citizen Journey</header>
     
-    <!-- CELEBRATION FLOATING EFFECT OVERLAY LAYER -->
+    <!-- CELEBRATION EFFECT OVERLAY LAYER -->
     <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
     <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
 
-    <!-- BOOTH SCAN POPUP (Only pops up when a booth QR is scanned) -->
+    <!-- BOOTH SCAN POPUP -->
     <div id="screen-mission-alert" class="content-section text-center hidden">
       <h2 id="mission-alert-title">Mission Cleared!</h2>
       <div class="passport-stamp-frame">
@@ -24,22 +24,19 @@
         <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
       </div>
       <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub below.</p>
-      <button class="return-hub-btn" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
+      <button class="return-hub-btn" type="button" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
     </div>
 
     <!-- MAIN SCROLLING CONTAINER VIEW -->
     <div id="screen-main-layout">
       
-      <!-- STEP 1: REGISTRATION CARD -->
-      <div id="section-register" class="content-section">
-        <h2>Step 1: Create Your Profile</h2>
-        <p class="instruction">Enter your details to generate your digital passport dashboard credentials.</p>
+      <!-- STEP 1: BULLETPROOF ONE-CLICK REGISTRATION BLOCK -->
+      <div id="section-register" class="content-section text-center">
+        <h2>Step 1: Activate Your Passport</h2>
+        <p class="instruction">Tap the secure button below to input your credentials and initialize your profile tracking map book.</p>
         
-        <div class="local-input-group">
-          <input type="text" id="input-name" placeholder="Type Your Full Name">
-          <input type="text" id="input-class" placeholder="Type Your Class">
-          <input type="text" id="input-section" placeholder="Type Your Section">
-          <button id="start-btn" type="button" onclick="registerUser()">Save Profile & Activate Dashboard 🚀</button>
+        <div style="padding: 10px 0;">
+          <button id="start-btn" type="button" style="background-color: #00e676; color: #000; font-size: 1.1rem; padding: 16px;" onclick="promptUserRegistration()">🔑 Tap to Enter Profile Details</button>
         </div>
       </div>
 
@@ -50,7 +47,7 @@
           <p>Citizen: <strong id="dash-name">Not Registered Yet</strong></p>
           <p>Class: <span id="dash-class">--</span> | Section: <span id="dash-section">--</span></p>
         </div>
-        <p class="instruction">You must complete Step 1 above before your stamp book collection can track your progress!</p>
+        <p class="instruction">You must initialize your profile credentials using Step 1 above before your stamp grid can collect badges.</p>
       </div>
 
       <!-- STEP 3: VERTICAL EXPLORER IMAGES GALLERY -->
@@ -76,9 +73,9 @@
             <div class="stamp-board-container" id="stamp-board-lock-box" style="position: relative;">
               
               <!-- Lock Message Overlay showing over the stamps if not registered -->
-              <div id="board-lock-msg" style="position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); color:#ff9800; font-weight:bold; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:4px; z-index:10; text-align:center; padding:20px; box-sizing:border-box;">
+              <div id="board-lock-msg" style="position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); color:#ff9800; font-weight:bold; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:4px; z-index:10; text-align:center; padding:20px; box-sizing:border-box;">
                 <span>🔒 Stamp Board Locked</span>
-                <span style="font-size:0.8rem; color:#aaa; font-weight:normal; margin-top:5px;">Please fill out and save your profile details in Step 1 to unlock tracking.</span>
+                <span style="font-size:0.8rem; color:#aaa; font-weight:normal; margin-top:5px;">Please initialize your profile details in Step 1 to unlock tracking.</span>
               </div>
 
               <img src="stamp_board.png" alt="Stamp Board" class="app-fluid-img">
@@ -110,8 +107,8 @@
             <canvas id="certificateCanvas" width="1000" height="700"></canvas>
           </div>
           
-          <button class="download-btn" onclick="downloadCertificate()">📥 Download Certificate File</button>
-          <button class="back-btn" onclick="resetApp()">🔄 Clear Memory & Restart Route</button>
+          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
+          <button class="back-btn" type="button" onclick="resetApp()">🔄 Clear Memory & Restart Route</button>
         </div>
       </div>
 
@@ -119,9 +116,9 @@
   </div>
 
   <script>
-    const totalMissions = 6;
-    const missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
-    const missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
+    var totalMissions = 6;
+    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
+    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
 
     window.addEventListener('DOMContentLoaded', function() {
       var urlParams = new URLSearchParams(window.location.search);
@@ -165,19 +162,20 @@
       updateUI();
     });
 
-    function registerUser() {
-      var nameVal = document.getElementById('input-name').value.trim();
-      var classVal = document.getElementById('input-class').value.trim();
-      var secVal = document.getElementById('input-section').value.trim();
+    // Native Dialogue Boxes completely bypass phone touchscreen and keyboard bugs
+    function promptUserRegistration() {
+      var name = prompt("Enter Full Name (For Certificate):");
+      if (!name || name.trim() === "") { alert("Profile activation cancelled. Name is required!"); return; }
+      
+      var cls = prompt("Enter Class (e.g. IX, X):");
+      if (!cls || cls.trim() === "") { alert("Profile activation cancelled. Class is required!"); return; }
+      
+      var sec = prompt("Enter Section (e.g. A, B):");
+      if (!sec || sec.trim() === "") { alert("Profile activation cancelled. Section is required!"); return; }
 
-      if (!nameVal || !classVal || !secVal) {
-        alert("Please fill out your Name, Class, and Section completely!");
-        return;
-      }
-
-      localStorage.setItem('user_name', nameVal);
-      localStorage.setItem('user_class', classVal);
-      localStorage.setItem('user_section', secVal);
+      localStorage.setItem('user_name', name.trim());
+      localStorage.setItem('user_class', cls.trim());
+      localStorage.setItem('user_section', sec.trim());
       localStorage.setItem('user_registered', 'true');
       
       if (!localStorage.getItem('unlocked_count')) {
@@ -185,8 +183,5 @@
       }
       
       updateUI();
-      document.getElementById('status-banner').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function closeMissionView() {
-      document.getElementById('screen-mission-alert').classList.add('hidden');
+      
+      setTimeout(function() {
