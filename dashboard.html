@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Citizen Passport Board</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header>🛡️ National Smart Citizen Journey</header>
+    
+    <canvas id="celebrationCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
+    <audio id="victorySound" src="https://mixkit.co" preload="auto"></audio>
+
+    <div id="screen-mission-alert" class="content-section text-center hidden">
+      <h2 id="mission-alert-title">Mission Cleared!</h2>
+      <div class="passport-stamp-frame">
+        <img id="mission-alert-img" src="green_citizen.png" alt="Mission State Image">
+        <div class="ink-stamp-overlay">MISSION COMPLETED ✔️</div>
+      </div>
+      <p class="instruction" style="margin-top: 15px;">Your progress has been permanently stamped onto your profile tracking dashboard hub below.</p>
+      <button class="return-hub-btn" type="button" onclick="closeMissionView()">↩️ Return to Journey Hub</button>
+    </div>
+
+    <div id="screen-main-layout">
+      <div class="content-section dashboard-box">
+        <h2>Step 2: Your Explorer Status</h2>
+        <div class="profile-summary">
+          <p>Citizen Name: <strong id="dash-name" style="color: #d4af37;">--</strong></p>
+          <p>Class Group: <span id="dash-class">--</span> | Section Room: <span id="dash-section">--</span></p>
+        </div>
+      </div>
+
+      <div class="content-section dashboard-box">
+        <div class="visual-gallery">
+          <div class="gallery-item"><h3>1. Visitor Passport</h3><img src="passport_bg.png" class="app-fluid-img"></div>
+          <div class="gallery-item"><h3>2. Welcome Banner</h3><img src="welcome.png" class="app-fluid-img"></div>
+          <div class="gallery-item"><h3>3. Exhibition Route Map</h3><img src="route_map.png" class="app-fluid-img"></div>
+          <div class="gallery-item">
+            <h3>4. Your Stamp Collection Board</h3>
+            <div class="stamp-board-container">
+              <img src="stamp_board.png" class="app-fluid-img">
+              <div class="stamps-grid-overlay">
+                <div class="stamp-slot" id="slot-1"><img src="green_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-2"><img src="healthy_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-3"><img src="digital_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-4"><img src="sustainable_india.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-5"><img src="innovation_citizen.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+                <div class="stamp-slot" id="slot-6"><img src="young_entrepreneur.png" class="stamp-img opacity-fade"><div class="badge-overlay">❌</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section text-center">
+        <h2>Step 3: Reward Generation</h2>
+        <div id="lock-overlay">🔒 Certificate locked until all 6 stamps are collected.</div>
+        <div id="canvas-wrapper" class="hidden-canvas">
+          <p class="instruction" style="color: #00e676; font-weight: bold;">🎉 Journey Complete! Your personalized certificate has been generated successfully below.</p>
+          <img src="route_completed.png" class="app-fluid-img" style="margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+          <div class="canvas-container" style="margin-bottom: 15px;"><canvas id="certificateCanvas" width="1000" height="700"></canvas></div>
+          <button class="download-btn" type="button" onclick="downloadCertificate()">📥 Download Certificate File</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var totalMissions = 6;
+    var missionFiles = ["green_citizen.png", "healthy_citizen.png", "digital_citizen.png", "sustainable_india.png", "innovation_citizen.png", "young_entrepreneur.png"];
+    var missionNames = ["1. Green Citizen Mission", "2. Healthy Citizen Mission", "3. Digital Citizen Mission", "4. Sustainable India Mission", "5. Innovation Citizen Mission", "6. Young Entrepreneur Mission"];
+    
+    var urlParams = new URLSearchParams(window.location.search);
+    var pName = urlParams.get('name') || '';
+    var pClass = urlParams.get('class') || '';
+    var pSec = urlParams.get('section') || '';
+    var unlockId = parseInt(urlParams.get('unlock'), 10);
+
+    window.addEventListener('DOMContentLoaded', function() {
+      // Restore milestones array loop trackers purely out of link tracking markers
+      var progressStr = urlParams.get('progress') || '';
+      var completed = {};
+      if (progressStr) {
+        progressStr.split(',').forEach(function(id) { completed[id] = true; });
+      }
+
+      if (unlockId && unlockId >= 1 && unlockId <= totalMissions) {
+        completed[unlockId] = true;
+        // Build new path containing all gathered stamp metrics live
+        var currentStamps = Object.keys(completed).join(',');
+        window.history.replaceState({}, document.title, window.location.pathname + "?name=" + encodeURIComponent(pName) + "&class=" + encodeURIComponent(pClass) + "&section=" + encodeURIComponent(pSec) + "&progress=" + currentStamps);
+        
+        document.getElementById('screen-main-layout').classList.add('hidden');
+        document.getElementById('screen-mission-alert').classList.remove('hidden');
+        document.getElementById('mission-alert-title').textContent = missionNames[unlockId - 1];
+        document.getElementById('mission-alert-img').src = missionFiles[unlockId - 1];
+      }
+
+      // Synchronize text elements instantly using link text configurations
+      document.getElementById('dash-name').textContent = pName.toUpperCase();
+      document.getElementById('dash-class').textContent = pClass.toUpperCase();
+      document.getElementById('dash-section').textContent = pSec.toUpperCase();
+
+      var count = Object.keys(completed).length;
+      for (var i = 1; i <= totalMissions; i++) {
+        var slot = document.getElementById('slot-' + i);
+        if (!slot) continue;
+        var img = slot.querySelector('.stamp-img');
+        var badge = slot.querySelector('.badge-overlay');
+        
+        if (completed[i]) {
+          img.classList.remove('opacity-fade');
+          badge.textContent = '✅';
+          badge.style.background = '#00e676';
+        } else {
+          img.classList.add('opacity-fade');
+          badge.textContent = '❌';
+          badge.style.background = '#e53935';
+        }
+      }
+
+      if (count === totalMissions) {
+        document.getElementById('lock-overlay').style.display = 'none';
+        document.getElementById('canvas-wrapper').classList.remove('hidden-canvas');
+        drawCertificateCanvas();
+        
+        var sound = document.getElementById('victorySound');
+        if (sound) { sound.volume = 0.6; sound.play().catch(function(e){}); }
+        startCelebrationBlast();
+      }
+    });
+
+    function closeMissionView() {
+      document.getElementById('screen-mission-alert').classList.add('hidden');
+      document.getElementById('screen-main-layout').classList.remove('hidden');
+    }
+
+    function startCelebrationBlast() {
+      var canvas = document.getElementById('celebrationCanvas'); var ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      var particles = []; var colors = ['#d4af37', '#00e676', '#ff9800', '#2196f3', '#e91e63'];
+      for (var i = 0; i < 60; i++) { particles.push({ x: Math.random() * canvas.width, y: canvas.height + Math.random() * 50, radius: Math.random() * 5 + 3, color: colors[Math.floor(Math.random() * colors.length)], speedY: -(Math.random() * 3 + 2), speedX: Math.random() * 2 - 1 }); }
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); var alive = false;
+        particles.forEach(function(p) { p.y += p.speedY; p.x += p.speedX; if (p.y > -20) { alive = true; ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill(); } });
+        if (alive) requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function drawCertificateCanvas() {
+      var canvas = document.getElementById('certificateCanvas'); var ctx = canvas.getContext('2d');
+      var img = new Image(); img.src = 'final_certificate.png';
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, 1000, 700);
+        ctx.fillStyle = '#1a237e'; ctx.font = 'bold italic 34px "Georgia", serif';
+        ctx.fillText(pName.toUpperCase(), 480, 335);
+      };
+    }
+
+    function downloadCertificate() {
+      var canvas = document.getElementById('certificateCanvas'); var link = document.createElement('a');
+      link.download = pName + '_Certificate.png'; link.href = canvas.toDataURL('image/png'); link.click();
+    }
+  </script>
+</body>
+</html>
